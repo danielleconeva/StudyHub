@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
     Firestore,
     collection,
@@ -10,49 +10,50 @@ import {
     deleteDoc,
     updateDoc,
     increment,
+    addDoc,
 } from '@angular/fire/firestore';
 
 import { toSignal } from '@angular/core/rxjs-interop';
+
 import { StudyPage } from '../../models/study-page.model';
 import { Like } from '../../models/like.model';
 import { Comment } from '../../models/comment.model';
 
 @Injectable({ providedIn: 'root' })
 export class StudyPagesService {
-    constructor(private firestore: Firestore) { }
+    private firestore = inject(Firestore);
+
+    private pagesRef = collection(this.firestore, 'pages') as CollectionReference<StudyPage>;
+    private likesRef = collection(this.firestore, 'likes') as CollectionReference<Like>;
+    private commentsRef = collection(this.firestore, 'comments') as CollectionReference<Comment>;
+
+    private _pagesSignal = toSignal(collectionData(this.pagesRef, { idField: 'id' }));
+    private _likesSignal = toSignal(collectionData(this.likesRef));
+    private _commentsSignal = toSignal(collectionData(this.commentsRef, { idField: 'id' })); // ✅ Add idField to comments
 
     getStudyPages() {
-        const ref = collection(this.firestore, 'pages') as CollectionReference<StudyPage>;
-        return toSignal(collectionData(ref, { idField: 'id' }));
+        return this._pagesSignal;
     }
 
     getLikes() {
-        const ref = collection(this.firestore, 'likes') as CollectionReference<Like>;
-        return toSignal(collectionData(ref));
+        return this._likesSignal;
     }
 
     getComments() {
-        const ref = collection(this.firestore, 'comments') as CollectionReference<Comment>;
-        return toSignal(collectionData(ref));
+        return this._commentsSignal;
     }
 
-    /**
-     * 🔁 Toggle like: if already liked by user, unlike it; else, like it
-     * Returns a Promise that resolves to either `'liked'` or `'unliked'`
-     */
     toggleLike(pageId: string, userId: string): Promise<'liked' | 'unliked'> {
         const likeId = `${pageId}_${userId}`;
         const likeRef = doc(this.firestore, 'likes', likeId);
         const pageRef = doc(this.firestore, 'pages', pageId);
 
-        return getDoc(likeRef).then(snapshot => {
+        return getDoc(likeRef).then((snapshot) => {
             if (snapshot.exists()) {
-                // 👎 Unlike
                 return deleteDoc(likeRef).then(() =>
                     updateDoc(pageRef, { likesCount: increment(-1) }).then(() => 'unliked')
                 );
             } else {
-                // 👍 Like
                 return setDoc(likeRef, {
                     pageId,
                     userId,
@@ -62,5 +63,18 @@ export class StudyPagesService {
                 );
             }
         });
+    }
+
+    addComment(comment: Comment) {
+        return addDoc(this.commentsRef, comment);
+    }
+
+    deleteComment(comment: Comment): Promise<void> {
+        if (!comment.id) {
+            return Promise.reject(new Error('Cannot delete comment: missing comment ID.'));
+        }
+
+        const commentRef = doc(this.firestore, 'comments', comment.id);
+        return deleteDoc(commentRef);
     }
 }

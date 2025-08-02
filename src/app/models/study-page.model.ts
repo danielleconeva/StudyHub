@@ -1,3 +1,4 @@
+import { Timestamp } from '@angular/fire/firestore';
 export interface SyllabusItem {
   text: string;
   done: boolean;
@@ -10,7 +11,7 @@ export interface StudyPage {
   syllabus: SyllabusItem[];
   isPublic: boolean;
   ownerId: string;
-  createdAt: string; 
+  createdAt: string | Timestamp;
   resources: String[];
   notes: string;
   likesCount: number;

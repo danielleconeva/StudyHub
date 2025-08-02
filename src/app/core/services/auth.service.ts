@@ -34,28 +34,39 @@ export interface User {
 export class AuthService {
   private _isLoggedIn = signal<boolean>(false);
   private _currentUser = signal<User | null>(null);
+  private _authResolved = signal<boolean>(false);
 
   public isLoggedIn = this._isLoggedIn.asReadonly();
   public currentUser = this._currentUser.asReadonly();
+  public authResolved = this._authResolved.asReadonly();
 
   constructor(
     private auth: Auth,
     private firestore: Firestore,
     private router: Router
   ) {
-    // ✅ Sync state from Firebase Auth
-    onAuthStateChanged(this.auth, (firebaseUser) => {
+    onAuthStateChanged(this.auth, async (firebaseUser) => {
       if (firebaseUser) {
-        this.syncUserFromFirestore(firebaseUser.uid, firebaseUser.displayName, firebaseUser.email);
+        await this.syncUserFromFirestore(
+          firebaseUser.uid,
+          firebaseUser.displayName,
+          firebaseUser.email
+        );
       } else {
         this._currentUser.set(null);
         this._isLoggedIn.set(false);
         localStorage.removeItem('currentUser');
       }
+
+      this._authResolved.set(true);
     });
   }
 
-  private async syncUserFromFirestore(uid: string, fallbackName: string | null, email: string | null) {
+  private async syncUserFromFirestore(
+    uid: string,
+    fallbackName: string | null,
+    email: string | null
+  ) {
     try {
       const userDoc = await getDoc(doc(this.firestore, 'users', uid));
       const data = userDoc.exists() ? (userDoc.data() as DocumentData) : null;
@@ -75,31 +86,31 @@ export class AuthService {
   }
 
   registerUser(fullName: string, email: string, password: string): Promise<void> {
-    return createUserWithEmailAndPassword(this.auth, email, password).then(async (cred: UserCredential) => {
-      if (!cred.user) throw new Error('User creation failed');
+    return createUserWithEmailAndPassword(this.auth, email, password).then(
+      async (cred: UserCredential) => {
+        if (!cred.user) throw new Error('User creation failed');
 
-      await updateProfile(cred.user, { displayName: fullName });
+        await updateProfile(cred.user, { displayName: fullName });
 
-      const user: User = {
-        id: cred.user.uid,
-        username: fullName,
-        email: cred.user.email ?? '',
-      };
+        const user: User = {
+          id: cred.user.uid,
+          username: fullName,
+          email: cred.user.email ?? '',
+        };
 
-      await setDoc(doc(this.firestore, 'users', user.id), {
-        username: user.username,
-        email: user.email,
-        createdAt: new Date(),
-      });
+        await setDoc(doc(this.firestore, 'users', user.id), {
+          username: user.username,
+          email: user.email,
+          createdAt: new Date(),
+        });
 
-      // Auth state listener will pick this up
-    });
+      }
+    );
   }
 
   loginUser(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       map((cred) => {
-        // Auth state listener will handle signal updates
         return {
           id: cred.user.uid,
           username: cred.user.displayName ?? 'Anonymous',
@@ -112,7 +123,6 @@ export class AuthService {
   logout(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       tap(() => {
-        // Auth state listener will clear state
         this.router.navigateByUrl('/');
       })
     );
