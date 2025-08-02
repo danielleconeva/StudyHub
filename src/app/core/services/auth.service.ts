@@ -8,13 +8,18 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
   signOut,
-  UserCredential
+  UserCredential,
+  onAuthStateChanged,
 } from '@angular/fire/auth';
 
 import {
   Firestore,
   doc,
-  setDoc
+  setDoc,
+  collection,
+  collectionData,
+  getDoc,
+  DocumentData,
 } from '@angular/fire/firestore';
 
 export interface User {
@@ -24,7 +29,7 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private _isLoggedIn = signal<boolean>(false);
@@ -38,72 +43,87 @@ export class AuthService {
     private firestore: Firestore,
     private router: Router
   ) {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      this._currentUser.set(JSON.parse(savedUser));
+    // ✅ Sync state from Firebase Auth
+    onAuthStateChanged(this.auth, (firebaseUser) => {
+      if (firebaseUser) {
+        this.syncUserFromFirestore(firebaseUser.uid, firebaseUser.displayName, firebaseUser.email);
+      } else {
+        this._currentUser.set(null);
+        this._isLoggedIn.set(false);
+        localStorage.removeItem('currentUser');
+      }
+    });
+  }
+
+  private async syncUserFromFirestore(uid: string, fallbackName: string | null, email: string | null) {
+    try {
+      const userDoc = await getDoc(doc(this.firestore, 'users', uid));
+      const data = userDoc.exists() ? (userDoc.data() as DocumentData) : null;
+
+      const user: User = {
+        id: uid,
+        username: data?.['username'] ?? fallbackName ?? 'Anonymous',
+        email: email ?? '',
+      };
+
+      this._currentUser.set(user);
       this._isLoggedIn.set(true);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    } catch (err) {
+      console.error('❌ Failed to fetch user from Firestore:', err);
     }
   }
 
-
   registerUser(fullName: string, email: string, password: string): Promise<void> {
-    return createUserWithEmailAndPassword(this.auth, email, password)
-      .then(async (cred: UserCredential) => {
-        if (!cred.user) throw new Error('User creation failed');
+    return createUserWithEmailAndPassword(this.auth, email, password).then(async (cred: UserCredential) => {
+      if (!cred.user) throw new Error('User creation failed');
 
-        await updateProfile(cred.user, { displayName: fullName });
+      await updateProfile(cred.user, { displayName: fullName });
 
-        const user: User = {
-          id: cred.user.uid,
-          username: fullName,
-          email: cred.user.email ?? ''
-        };
+      const user: User = {
+        id: cred.user.uid,
+        username: fullName,
+        email: cred.user.email ?? '',
+      };
 
-        await setDoc(doc(this.firestore, 'users', user.id), {
-          username: user.username,
-          email: user.email,
-          createdAt: new Date()
-        });
-
-        this._currentUser.set(user);
-        this._isLoggedIn.set(true);
-        localStorage.setItem('currentUser', JSON.stringify(user));
+      await setDoc(doc(this.firestore, 'users', user.id), {
+        username: user.username,
+        email: user.email,
+        createdAt: new Date(),
       });
-  }
 
+      // Auth state listener will pick this up
+    });
+  }
 
   loginUser(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      map(cred => {
-        const user: User = {
+      map((cred) => {
+        // Auth state listener will handle signal updates
+        return {
           id: cred.user.uid,
           username: cred.user.displayName ?? 'Anonymous',
-          email: cred.user.email ?? ''
+          email: cred.user.email ?? '',
         };
-
-        this._currentUser.set(user);
-        this._isLoggedIn.set(true);
-        localStorage.setItem('currentUser', JSON.stringify(user));
-
-        return user;
       })
     );
   }
 
-
   logout(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       tap(() => {
-        this._currentUser.set(null);
-        this._isLoggedIn.set(false);
-        localStorage.removeItem('currentUser');
+        // Auth state listener will clear state
         this.router.navigateByUrl('/');
       })
     );
   }
 
-
   getCurrentUserId(): string | null {
     return this._currentUser()?.id ?? null;
+  }
+
+  getAllUsers(): Observable<User[]> {
+    const usersRef = collection(this.firestore, 'users');
+    return collectionData(usersRef, { idField: 'id' }) as Observable<User[]>;
   }
 }

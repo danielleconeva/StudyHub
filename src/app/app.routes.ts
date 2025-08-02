@@ -22,6 +22,11 @@ export const routes: Routes = [
       import('./features/focus-room/focus-room').then((m) => m.FocusRoom),
   },
   {
+    path: "explore",
+    loadComponent: () =>
+      import('./features/explore-pages/explore-pages').then((m) => m.ExplorePages),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./shared/not-found/not-found').then((m) => m.NotFound),
