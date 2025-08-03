@@ -10,7 +10,7 @@ import {
     deleteDoc,
     updateDoc,
     increment,
-    addDoc,
+    addDoc
 } from '@angular/fire/firestore';
 
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -29,7 +29,7 @@ export class StudyPagesService {
 
     private _pagesSignal = toSignal(collectionData(this.pagesRef, { idField: 'id' }));
     private _likesSignal = toSignal(collectionData(this.likesRef));
-    private _commentsSignal = toSignal(collectionData(this.commentsRef, { idField: 'id' })); // ✅ Add idField to comments
+    private _commentsSignal = toSignal(collectionData(this.commentsRef, { idField: 'id' }));
 
     getStudyPages() {
         return this._pagesSignal;
@@ -76,5 +76,15 @@ export class StudyPagesService {
 
         const commentRef = doc(this.firestore, 'comments', comment.id);
         return deleteDoc(commentRef);
+    }
+
+    deleteStudyPage(pageId: string): Promise<void> {
+        const pageRef = doc(this.firestore, 'pages', pageId);
+        return deleteDoc(pageRef);
+    }
+
+    updateStudyPage(pageId: string, data: Partial<StudyPage>): Promise<void> {
+        const pageRef = doc(this.firestore, 'pages', pageId);
+        return updateDoc(pageRef, data);
     }
 }

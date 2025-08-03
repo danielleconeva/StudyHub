@@ -32,7 +32,19 @@ export const routes: Routes = [
   {
     path: 'explore/:id',
     loadComponent: () =>
-      import('./features/explore-pages/study-page-details/study-page-details').then((m) => m.StudyPageDetails),
+      import('./features/explore-pages/study-page-details/study-page-details').then(
+        (m) => m.StudyPageDetails
+      ),
+  },
+  {
+    path: 'my-study-pages',
+    loadComponent: () =>
+      import('./features/my-study-pages/my-study-pages').then((m) => m.MyStudyPages),
+  },
+  {
+    path: 'my-study-pages/:id',
+    loadComponent: () =>
+      import('./features/my-study-pages/my-study-page-details/my-study-page-details').then(m => m.MyStudyPageDetails),
   },
   {
     path: '**',
