@@ -42,9 +42,25 @@ export const routes: Routes = [
       import('./features/my-study-pages/my-study-pages').then((m) => m.MyStudyPages),
   },
   {
+    path: 'my-study-pages/new',
+    loadComponent: () =>
+      import('./features/my-study-pages/new-study-page/new-study-page').then(
+        (m) => m.NewStudyPage
+      ),
+  },
+  {
+    path: 'my-study-pages/edit/:id',
+    loadComponent: () =>
+      import('./features/my-study-pages/edit-study-page/edit-study-page').then(
+        (m) => m.EditStudyPage
+      ),
+  },
+  {
     path: 'my-study-pages/:id',
     loadComponent: () =>
-      import('./features/my-study-pages/my-study-page-details/my-study-page-details').then(m => m.MyStudyPageDetails),
+      import('./features/my-study-pages/my-study-page-details/my-study-page-details').then(
+        (m) => m.MyStudyPageDetails
+      ),
   },
   {
     path: '**',
