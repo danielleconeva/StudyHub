@@ -1,0 +1,95 @@
+<section class="home-container">
+
+  <div class="content-wrapper">
+    <h1 class="title">StudyHub</h1>
+    <h2 class="subtitle">Focus. Learn. Achieve.</h2>
+    <p class="description">
+      Transform your study sessions with immersive focus tools, intelligent task
+      management, and collaborative knowledge sharing.
+    </p>
+
+    <div class="button-group">
+      <a routerLink="/focus-room" class="btn primary">Start Focus Session</a>
+      <a routerLink="/explore" class="btn secondary">Discover Public Study Pages</a>
+    </div>
+  </div>
+
+
+  <div class="feature-intro">
+    <h2 class="feature-heading">
+      <span class="gradient-text">Powerful Features</span><br />
+      for Modern Learners
+    </h2>
+    <p class="feature-subtitle">
+      Everything you need to transform your study experience and achieve your academic goals
+    </p>
+  </div>
+
+
+  <div class="glass-card-grid">
+
+    <div class="glass-card">
+      <h3>📘 Focus Room</h3>
+      <p>Create immersive study environments with Pomodoro timers, ambient sounds, and motivational quotes.</p>
+      <ul>
+        <li>Pomodoro, Countdown & Stopwatch modes</li>
+        <li>Ambient sounds and visuals</li>
+        <li>Motivational quotes rotation</li>
+        <li>Session tracking</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h3>📋 Task Management</h3>
+      <p>Organize your study workflow with smart task organization, priorities, and progress tracking.</p>
+      <ul>
+        <li>CRUD operations for tasks</li>
+        <li>Filter by subject & priority</li>
+        <li>Subtask checklists</li>
+        <li>Progress indicators</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h3>📊 Progress Analytics</h3>
+      <p>Visualize your productivity patterns and study habits with detailed charts and insights.</p>
+      <ul>
+        <li>Weekly study minutes tracking</li>
+        <li>Consecutive day streaks</li>
+        <li>Subject time distribution</li>
+        <li>Daily progress graphs</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h3>🗂️ Page Board</h3>
+      <p>Discover and share study resources with a vibrant community of learners.</p>
+      <ul>
+        <li>Browse public study pages</li>
+        <li>Filter by subject & tags</li>
+        <li>Search functionality</li>
+        <li>Community engagement</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h3>📑 My Pages</h3>
+      <p>Create and manage your own study resources with rich content and sharing options.</p>
+      <ul>
+        <li>Create custom study pages</li>
+        <li>Rich text editing</li>
+        <li>Public/private toggle</li>
+        <li>Resource embedding</li>
+      </ul>
+    </div>
+  </div>
+
+  @if (!isLoggedIn()) {
+  <div class="signup-callout">
+    <p class="signup-message">
+      Want to personalize your study space and unlock more features?
+    </p>
+    <a routerLink="/sign-up" class="btn primary">Create a Free Account</a>
+  </div>
+  }
+</section>

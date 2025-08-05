@@ -1,0 +1,101 @@
+<div class="create-page-container">
+
+    <div class="toast" *ngIf="successMessage()">
+        {{ successMessage() }}
+    </div>
+
+
+    <div class="back-button-wrapper">
+        <button type="button" class="back-button" (click)="goBackToMyPages()">
+            ← Back to My Pages
+        </button>
+    </div>
+
+
+    <div class="header">
+        <h1 class="title">Create Study Page</h1>
+        <p class="subtitle">Build a page that helps you study smarter and stay on track</p>
+    </div>
+
+
+    <div class="form-card">
+        <h2 class="section-title">
+            📘 Study Page Details
+        </h2>
+
+
+        <div class="form-group">
+            <label for="title">Title *</label>
+            <input id="title" type="text" class="input" [ngModel]="title()" (ngModelChange)="title.set($event)"
+                placeholder="Enter a descriptive title for your study page" />
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="subject">Subject *</label>
+                <input id="subject" type="text" class="input" [ngModel]="subject()"
+                    (ngModelChange)="subject.set($event)"
+                    placeholder="Enter the subject (e.g., Chemistry, Literature)" />
+            </div>
+
+            <div class="form-group half">
+                <label for="visibility">Visibility</label>
+                <select id="visibility" class="select" [ngModel]="visibility()"
+                    (ngModelChange)="visibility.set($event)">
+                    <option value="private">🙈 Private – Only you can see this</option>
+                    <option value="public">🌍 Public – Visible to everyone</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="notes">Study Notes *</label>
+            <textarea id="notes" class="textarea" rows="6" [ngModel]="notes()" (ngModelChange)="notes.set($event)"
+                placeholder="Write your study notes, explanations, examples, and key concepts here..."></textarea>
+        </div>
+
+
+        <div class="form-group">
+            <label>Syllabus</label>
+            <div class="syllabus-input">
+                <input type="text" class="input" [ngModel]="newSyllabusItem()"
+                    (ngModelChange)="newSyllabusItem.set($event)" placeholder="Add a topic, step or subtask..." />
+                <button type="button" class="add-button" (click)="addSyllabusItem()">Add</button>
+            </div>
+            <ul class="syllabus-list">
+                <li *ngFor="let item of syllabus(); let i = index">
+                    <span class="bullet">•</span> {{ item.text }}
+                    <button type="button" class="remove-button" (click)="removeSyllabusItem(i)">✕</button>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="form-group">
+            <label>Resources (optional)</label>
+            <div class="resources-row">
+                <input type="text" class="input"
+                    placeholder="Add references to materials you might want to revisit while studying this topic"
+                    [ngModel]="newResource()" (ngModelChange)="newResource.set($event)" />
+                <button type="button" class="add-button" (click)="addResource()">Add</button>
+            </div>
+            <ul class="resources-list">
+                <li *ngFor="let res of resources(); let i = index">
+                    <span>{{ res }}</span>
+                    <button type="button" class="remove-button" (click)="removeResource(i)">✕</button>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="form-actions">
+            <button type="button" class="clear-button" (click)="clearForm()">Clear Form</button>
+            <button type="button" class="submit-button"
+                [disabled]="!title().trim() || !subject().trim() || !notes().trim()" (click)="createStudyPage()">
+                Create Study Page
+            </button>
+        </div>
+    </div>
+</div>

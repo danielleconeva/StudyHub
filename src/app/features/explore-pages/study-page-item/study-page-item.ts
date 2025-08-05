@@ -1,0 +1,48 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { StudyPage } from '../../../models/study-page.model';
+import { Timestamp } from '@angular/fire/firestore';
+import { ViewportScroller } from '@angular/common';
+
+@Component({
+  selector: 'app-study-page-item',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './study-page-item.html',
+  styleUrl: './study-page-item.css',
+})
+export class StudyPageItem {
+  @Input() page!: StudyPage;
+  @Input() author: string = 'Anonymous';
+  @Input() commentCount: number = 0;
+  @Input() isLiked: boolean = false;
+  @Input() isLoggedIn: boolean = false;
+
+  @Output() like = new EventEmitter<StudyPage>();
+
+  constructor(
+    private router: Router,
+    private scroller: ViewportScroller
+  ) { }
+
+  formatDate(value: string | Timestamp): string {
+    const date = typeof value === 'string' ? new Date(value) : value.toDate();
+    return date.toLocaleDateString('en-GB');
+  }
+
+  handleLikeClick() {
+    if (!this.isLoggedIn) return;
+    this.onLikeClick();
+  }
+
+  onLikeClick() {
+    this.like.emit(this.page);
+  }
+
+  navigateToPage(pageId: string) {
+    this.router.navigate(['/explore', pageId]).then(() => {
+      this.scroller.scrollToPosition([0, 0]);
+    });
+  }
+}

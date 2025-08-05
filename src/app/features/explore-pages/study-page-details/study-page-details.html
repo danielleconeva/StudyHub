@@ -1,0 +1,75 @@
+<div class="details-container">
+
+    <a routerLink="/explore" class="back-link">← Back to Explore</a>
+
+
+    <div class="title-section">
+        <h1 class="title">{{ page()?.title }}</h1>
+        <div class="meta">
+            <span class="tag">{{ page()?.subject }}</span>
+            <span class="visibility">🌐 Public</span>
+            <span class="likes">❤️ {{ page()?.likesCount ?? 0 }}</span>
+            <span class="date">{{ formatDate(page()?.createdAt ?? '') }}</span>
+        </div>
+    </div>
+
+
+    <section class="section">
+        <h2 class="section-title">🗒️ Study Notes</h2>
+        <p class="notes" [innerHTML]="page()?.notes"></p>
+    </section>
+
+
+    <section class="section">
+        <h2 class="section-title">📘 Syllabus</h2>
+        <ul class="syllabus-list">
+            <li *ngFor="let item of page()?.syllabus">
+                <input type="checkbox" [checked]="item.done" disabled />
+                {{ item.text }}
+            </li>
+        </ul>
+    </section>
+
+
+    <section class="section">
+        <h2 class="section-title">🔗 Resources</h2>
+        <ul class="resources">
+            <li *ngFor="let link of page()?.resources">
+                <a [href]="link" target="_blank">{{ link }}</a>
+            </li>
+        </ul>
+    </section>
+
+
+    <section class="section comments-section" id="comments">
+        <h2 class="section-title">💬 Comments ({{ comments().length }})</h2>
+
+        <div class="comment" *ngFor="let c of comments()">
+            <div class="avatar">{{ c.username[0] }}</div>
+            <div class="content">
+                <div class="header">
+                    <span class="username">{{ c.username }}</span>
+                    <span class="date">{{ formatDate(c.createdAt) }}</span>
+
+
+                    @if (c.userId === currentUserId()) {
+                    <button class="delete-btn" (click)="onDeleteComment(c)">🗑️</button>
+                    }
+                </div>
+
+                <p class="text">{{ c.text }}</p>
+            </div>
+        </div>
+
+
+
+        @if (isLoggedIn()) {
+        <form class="comment-form" (submit)="onCommentSubmit($event)">
+            <div class="avatar you">You</div>
+            <textarea placeholder="Add a comment..." [(ngModel)]="newComment" name="newComment" required></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+        }
+
+    </section>
+</div>

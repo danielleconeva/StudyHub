@@ -1,0 +1,64 @@
+<div class="focus-room-theme focus-room-container">
+    <!-- Title & Subtitle -->
+    <header class="header">
+        <h1 class="title">Focus Room</h1>
+        <p class="subtitle">Create your perfect study environment</p>
+    </header>
+
+    <!-- Cards Grid -->
+    <section class="cards-grid">
+
+        <!-- SESSION MODE CARD -->
+        <article class="card session-mode">
+            <h2>Session Mode</h2>
+            <div class="mode-buttons">
+                <button *ngFor="let mode of modes" [class.active]="mode.label === selectedMode().label"
+                    (click)="selectMode(mode)">
+                    {{ mode.label }}
+                </button>
+            </div>
+        </article>
+
+        <!-- MOTIVATION QUOTE CARD -->
+        <article class="card motivation">
+            <h2>📖 Daily Motivation</h2>
+            <blockquote class="quote">
+                {{ dailyQuote }}
+            </blockquote>
+        </article>
+
+        <!-- TIMER CARD -->
+        <article class="card timer">
+            <h2 class="visually-hidden">Pomodoro Timer</h2>
+
+            <div class="static-timer-ring">
+                <div class="circle-border">
+                    <h1 class="time-display">{{ formattedTime }}</h1>
+                </div>
+            </div>
+
+            <div class="timer-buttons">
+                <button class="start-btn" (click)="toggleTimer()">
+                    {{ timerRunning() ? 'Pause' : 'Start' }}
+                </button>
+                <button class="reset-btn" (click)="resetTimer()">Reset</button>
+            </div>
+        </article>
+
+        <!-- AMBIENT SOUNDS CARD -->
+        <article class="card sounds">
+            <h2>🔊 Ambient Sounds</h2>
+            <div class="sound-buttons">
+                <button *ngFor="let sound of sounds" [class.active]="sound === selectedSound()"
+                    (click)="selectSound(sound)">
+                    {{ sound }}
+                </button>
+            </div>
+            <div class="volume-slider">
+                <label for="volume">Volume</label>
+                <input id="volume" type="range" min="0" max="100" [value]="volume()" (input)="setVolume($event)" />
+            </div>
+        </article>
+
+    </section>
+</div>

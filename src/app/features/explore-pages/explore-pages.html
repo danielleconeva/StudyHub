@@ -1,0 +1,32 @@
+<div class="explore-container">
+
+    <div class="header">
+        <h1 class="title">Explore</h1>
+        <p class="subtitle">Discover amazing study resources shared by the community</p>
+    </div>
+
+    <div class="controls">
+        <input type="text" class="search-input" placeholder="Search study pages..." [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)" />
+
+        <select class="filter-select" [ngModel]="selectedSubject()" (ngModelChange)="selectedSubject.set($event)">
+            <option *ngFor="let subject of getSubjects()" [value]="subject">{{ subject }}</option>
+        </select>
+
+        <select class="filter-select" [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
+            <option value="Most Popular">Most Popular</option>
+            <option value="Newest">Newest</option>
+        </select>
+    </div>
+
+    <div class="page-grid">
+        <app-study-page-item *ngFor="let page of filteredPages()" [page]="page" [author]="getAuthorName(page.ownerId)"
+            [commentCount]="getCommentCount(page.id)" [isLiked]="likedPages().has(page.id)" [isLoggedIn]="isLoggedIn()"
+            (like)="likePage($event)"></app-study-page-item>
+    </div>
+
+
+    <div class="load-more-wrapper" *ngIf="filteredPages().length < (studyPages()?.length || 0)">
+        <button class="load-more-btn" (click)="loadMore()">Load More Pages</button>
+    </div>
+</div>
