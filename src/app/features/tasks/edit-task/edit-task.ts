@@ -18,13 +18,11 @@ import { Timestamp } from '@angular/fire/firestore';
   styleUrl: './edit-task.css'
 })
 export class EditTask implements OnInit {
-
   private taskService = inject(TaskService);
   private authService = inject(AuthService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-
 
   taskId = '';
   titleValue = '';
@@ -34,9 +32,7 @@ export class EditTask implements OnInit {
   newSubtaskValue = '';
   subtasks: Subtask[] = [];
 
-
   successMessage = signal<string | null>(null);
-
 
   getTodayDate(): string {
     return new Date().toISOString().split('T')[0];
@@ -52,10 +48,24 @@ export class EditTask implements OnInit {
 
     this.taskId = id;
 
+    const currentUserId = this.authService.getCurrentUserId();
+    if (!currentUserId) {
+      this.errorService.show?.('You must be logged in to edit a task.');
+      this.router.navigate(['/tasks']);
+      return;
+    }
+
     this.taskService.getTaskById(id).then((task: Task | null) => {
       if (!task) {
         this.errorService.show?.('Task not found.');
         this.router.navigate(['/tasks']);
+        return;
+      }
+
+
+      if (task.ownerId !== currentUserId) {
+        this.errorService.show?.('You are not authorized to edit this task.');
+        this.router.navigate(['/not-found']);
         return;
       }
 
@@ -118,8 +128,8 @@ export class EditTask implements OnInit {
       })
       .catch(() => this.errorService.show?.('Failed to update task.'));
   }
+
   goBackToTasks() {
     this.router.navigate(['/tasks']);
   }
-
 }

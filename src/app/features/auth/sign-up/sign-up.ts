@@ -1,18 +1,27 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormGroup,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
-import { ErrorService } from '../../../core/services/error.service';
 import { NgClass } from '@angular/common';
 
+import { AuthService } from '../../../core/services/auth.service';
+import { ErrorService } from '../../../core/services/error.service';
+import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
+import {
+  usernameTakenValidator,
+  emailTakenValidator
+} from '../../../shared/validators/unique-validators';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink, NgClass],
   templateUrl: './sign-up.html',
-  styleUrl: './sign-up.css'
+  styleUrl: './sign-up.css',
 })
 export class SignUp {
   signupForm: FormGroup;
@@ -28,19 +37,28 @@ export class SignUp {
   ) {
     this.signupForm = this.fb.group(
       {
-        fullName: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
+        username: [
+          '',
+          [Validators.required],
+          [usernameTakenValidator(this.authService)]
+        ],
+        email: [
+          '',
+          [Validators.required, Validators.email],
+          [emailTakenValidator(this.authService)]
+        ],
         password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', [Validators.required]]
+        confirmPassword: ['', [Validators.required]],
       },
       {
-        validators: passwordMatchValidator('password', 'confirmPassword')
+        validators: passwordMatchValidator('password', 'confirmPassword'),
       }
     );
+
   }
 
-  get fullName() {
-    return this.signupForm.get('fullName');
+  get username() {
+    return this.signupForm.get('username');
   }
 
   get email() {
@@ -61,14 +79,14 @@ export class SignUp {
       return;
     }
 
-    const { fullName, email, password } = this.signupForm.value;
+    const { username, email, password } = this.signupForm.value;
 
     this.isSubmitting = true;
     this.errorService.clear();
     this.successMessage = null;
 
     try {
-      await this.authService.registerUser(fullName!, email!, password!);
+      await this.authService.registerUser(username!, email!, password!);
 
       this.successMessage = 'Account successfully created!';
       this.signupForm.reset();
@@ -77,7 +95,6 @@ export class SignUp {
         this.successMessage = null;
         this.router.navigateByUrl('/');
       }, 2000);
-
     } catch (err: any) {
       const msg = this.mapFirebaseError(err);
       this.errorService.show(msg);

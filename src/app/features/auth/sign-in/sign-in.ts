@@ -25,11 +25,10 @@ export class SignIn {
   ) {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  // 🔹 Form Getters
   get email() {
     return this.signInForm.get('email');
   }
@@ -38,7 +37,6 @@ export class SignIn {
     return this.signInForm.get('password');
   }
 
-  // 🔹 Submit Handler
   onSubmit() {
     if (this.signInForm.invalid) {
       this.signInForm.markAllAsTouched();
@@ -57,27 +55,19 @@ export class SignIn {
       error: (err) => {
         const msg = this.mapFirebaseError(err);
         this.errorService.show(msg);
-        this.signInForm.reset(); // optional
+        this.signInForm.reset();
         this.isSubmitting = false;
       }
     });
   }
 
-
-  // 🔹 Firebase Error Mapping
   private mapFirebaseError(error: any): string {
     const code = error?.code;
-
     switch (code) {
-      case 'auth/user-not-found':
-      case 'auth/wrong-password':
-        return 'Invalid email or password.';
-      case 'auth/invalid-email':
-        return 'Invalid email format.';
-      case 'auth/too-many-requests':
-        return 'Too many attempts. Try again later.';
+      case 'auth/invalid-credential':
+        return "Incorrect email or password. Please try again.";
       default:
-        return 'Login failed. Please try again.';
+        return "Login failed. Please try again.";
     }
   }
 }

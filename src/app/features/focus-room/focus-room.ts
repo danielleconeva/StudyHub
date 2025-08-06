@@ -10,12 +10,12 @@ import { quotes } from '../../data/quotes';
   styleUrls: ['./focus-room.css']
 })
 export class FocusRoom {
-  // Timer States
+
   timeLeft = signal(25 * 60);
   timerRunning = signal(false);
   intervalId: any = null;
 
-  // Session Modes
+
   modes = [
     { label: 'Focus Time', minutes: 25 },
     { label: 'Short Break', minutes: 5 },
@@ -23,13 +23,13 @@ export class FocusRoom {
   ];
   selectedMode = signal(this.modes[0]);
 
-  // Ambient Sounds
+
   sounds = ['Rain', 'Forest', 'Jazz Café', 'Ocean'];
   selectedSound = signal('');
   volume = signal(50);
   private audioPlayer: HTMLAudioElement | null = null;
 
-  // Daily quote based on day of year
+
   get dailyQuote(): string {
     const today = new Date();
     const dayOfYear = this.getDayOfYear(today);

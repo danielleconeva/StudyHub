@@ -5,19 +5,14 @@ import {
   signal,
   OnInit
 } from '@angular/core';
-
-import {
-  NgFor,
-  ViewportScroller
-} from '@angular/common';
-
+import { NgFor, ViewportScroller } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { Auth, User } from '@angular/fire/auth';
 import { Timestamp } from '@angular/fire/firestore';
-
 import { StudyPagesService } from '../../../core/services/study-pages.service';
 import { Comment } from '../../../models/comment.model';
+import { StudyPage } from '../../../models/study-page.model';
 
 @Component({
   selector: 'app-study-page-details',
@@ -28,24 +23,18 @@ import { Comment } from '../../../models/comment.model';
 })
 export class StudyPageDetails implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private auth = inject(Auth);
   private studyPagesService = inject(StudyPagesService);
   private scroller = inject(ViewportScroller);
 
   pageId = signal<string | null>(null);
   currentUserId = signal<string | null>(null);
+  page = signal<StudyPage | null>(null);
   newComment = signal<string>('');
   isLikedByCurrentUser = signal(false);
 
   isLoggedIn = computed(() => !!this.currentUserId());
-
-  pagesSignal = this.studyPagesService.getStudyPages();
-
-  page = computed(() => {
-    const id = this.pageId();
-    const allPages = this.pagesSignal() ?? [];
-    return allPages.find((p) => p.id === id) ?? null;
-  });
 
   comments = computed(() => {
     const all = this.studyPagesService.getComments()() ?? [];
@@ -53,21 +42,26 @@ export class StudyPageDetails implements OnInit {
     return id ? all.filter((c) => c.pageId === id) : [];
   });
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(async (params) => {
-      const id = params.get('id');
-      if (!id) return;
+  async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) return;
 
-      this.pageId.set(id);
-      await this.checkUser();
-      await this.checkIfLiked(id);
-    });
+    this.pageId.set(id);
+    await this.checkUser();
+
+    const pageData = await this.studyPagesService.getPageById(id);
+
+    if (!pageData || !pageData.isPublic) {
+      this.router.navigate(['/404']);
+      return;
+    }
+
+    this.page.set(pageData);
+    await this.checkIfLiked(id);
 
     this.route.fragment.subscribe(fragment => {
       if (fragment) {
-        setTimeout(() => {
-          this.scroller.scrollToAnchor(fragment);
-        }, 0);
+        setTimeout(() => this.scroller.scrollToAnchor(fragment), 0);
       }
     });
   }
@@ -76,7 +70,6 @@ export class StudyPageDetails implements OnInit {
     const user = await new Promise<User | null>((resolve) =>
       this.auth.onAuthStateChanged((u) => resolve(u))
     );
-
     this.currentUserId.set(user?.uid ?? null);
   }
 
@@ -91,7 +84,6 @@ export class StudyPageDetails implements OnInit {
     const user = await new Promise<User | null>((resolve) =>
       this.auth.onAuthStateChanged((u) => resolve(u))
     );
-
     if (!user) return;
 
     const comment: Comment = {
@@ -107,9 +99,7 @@ export class StudyPageDetails implements OnInit {
   }
 
   async onDeleteComment(comment: Comment) {
-    const confirmDelete = confirm('Are you sure you want to delete this comment?');
-    if (!confirmDelete) return;
-
+    if (!confirm('Are you sure you want to delete this comment?')) return;
     await this.studyPagesService.deleteComment(comment);
   }
 
@@ -128,10 +118,12 @@ export class StudyPageDetails implements OnInit {
     const result = await this.studyPagesService.toggleLike(pageId, userId);
     this.isLikedByCurrentUser.set(result === 'liked');
 
-    const currentPage = this.page();
-    if (currentPage) {
-      const updated = { ...currentPage };
-      updated.likesCount += result === 'liked' ? 1 : -1;
+    const current = this.page();
+    if (current) {
+      this.page.set({
+        ...current,
+        likesCount: current.likesCount + (result === 'liked' ? 1 : -1),
+      });
     }
   }
 
@@ -140,11 +132,9 @@ export class StudyPageDetails implements OnInit {
       const parsed = new Date(date);
       return isNaN(parsed.getTime()) ? '' : parsed.toLocaleDateString();
     }
-
     if (date instanceof Timestamp) {
       return date.toDate().toLocaleDateString();
     }
-
     return '';
   }
 }

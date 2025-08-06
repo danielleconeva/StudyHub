@@ -1,7 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { from, map, Observable, tap } from 'rxjs';
-
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -19,6 +18,7 @@ import {
   collection,
   collectionData,
   getDoc,
+  getDocs,
   DocumentData,
 } from '@angular/fire/firestore';
 
@@ -85,16 +85,16 @@ export class AuthService {
     }
   }
 
-  registerUser(fullName: string, email: string, password: string): Promise<void> {
+  registerUser(username: string, email: string, password: string): Promise<void> {
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       async (cred: UserCredential) => {
         if (!cred.user) throw new Error('User creation failed');
 
-        await updateProfile(cred.user, { displayName: fullName });
+        await updateProfile(cred.user, { displayName: username });
 
         const user: User = {
           id: cred.user.uid,
-          username: fullName,
+          username,
           email: cred.user.email ?? '',
         };
 
@@ -103,10 +103,10 @@ export class AuthService {
           email: user.email,
           createdAt: new Date(),
         });
-
       }
     );
   }
+
 
   loginUser(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
@@ -134,6 +134,13 @@ export class AuthService {
 
   getAllUsers(): Observable<User[]> {
     const usersRef = collection(this.firestore, 'users');
-    return collectionData(usersRef, { idField: 'id' }) as Observable<User[]>;
+    return from(getDocs(usersRef)).pipe(
+      map((snapshot) =>
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        } as User))
+      )
+    );
   }
 }

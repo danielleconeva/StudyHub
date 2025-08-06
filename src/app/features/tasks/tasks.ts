@@ -89,11 +89,17 @@ export class Tasks {
   }
 
   handleToggleSubtask(event: { taskId: string; subtaskIndex: number }) {
+    const currentUserId = this.authService.getCurrentUserId();
     const currentTasks = this.tasks();
     const taskIndex = currentTasks.findIndex(t => t.id === event.taskId);
     if (taskIndex === -1) return;
 
     const task = currentTasks[taskIndex];
+    if (task.ownerId !== currentUserId) {
+      this.errorService.show('You are not authorized to update this task.');
+      return;
+    }
+
     const currentStatus = task.subtasks[event.subtaskIndex]?.done ?? false;
 
     this.taskService
@@ -110,11 +116,19 @@ export class Tasks {
       });
   }
 
+
   onDeleteTask(taskId: string) {
+    const currentUserId = this.authService.getCurrentUserId();
+    const task = this.tasks().find(t => t.id === taskId);
+
+    if (!task || task.ownerId !== currentUserId) {
+      this.errorService.show('You are not authorized to delete this task.');
+      return;
+    }
+
     if (confirm('Are you sure you want to delete this task?')) {
       this.taskService.deleteTask(taskId)
         .then(() => {
-          // ✅ Update local state to remove the task
           this.tasks.update(tasks => tasks.filter(t => t.id !== taskId));
         })
         .catch(() => {
@@ -123,13 +137,32 @@ export class Tasks {
     }
   }
 
+
   onEditTask(taskId: string) {
+    const currentUserId = this.authService.getCurrentUserId();
+    const task = this.tasks().find(t => t.id === taskId);
+
+    if (!task || task.ownerId !== currentUserId) {
+      this.errorService.show('You are not authorized to edit this task.');
+      return;
+    }
+
     this.router.navigate([`/tasks/edit/${taskId}`]);
   }
 
+
   onAddSubtask(event: { taskId: string; text: string }) {
+    const currentUserId = this.authService.getCurrentUserId();
+    const task = this.tasks().find(t => t.id === event.taskId);
+
+    if (!task || task.ownerId !== currentUserId) {
+      this.errorService.show('You are not authorized to modify this task.');
+      return;
+    }
+
     this.taskService.addSubtask(event.taskId, event.text);
   }
+
 
   onCreateNewTask() {
     this.router.navigate(['/tasks/new']);

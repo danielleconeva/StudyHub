@@ -91,22 +91,28 @@ export class MyStudyPages {
   }
 
   onEdit(page: StudyPage) {
-    if (!page.id) {
-      console.error('Cannot edit page: missing ID');
+    const currentUserId = this.userId();
+    if (page.ownerId !== currentUserId) {
+      alert("You cannot edit someone else’s page.");
       return;
     }
 
     this.router.navigate(['/my-study-pages', 'edit', page.id]);
   }
 
+
   onDelete(page: StudyPage) {
+    const currentUserId = this.userId();
+    if (page.ownerId !== currentUserId) {
+      alert("You are not allowed to delete this page.");
+      return;
+    }
+
     const confirmDelete = window.confirm(
       `Are you sure you want to delete the study page "${page.title}"? This action cannot be undone.`
     );
 
-    if (!confirmDelete) {
-      return;
-    }
+    if (!confirmDelete) return;
 
     this.studyPagesService.deleteStudyPage(page.id)
       .then(() => {
@@ -116,7 +122,6 @@ export class MyStudyPages {
         console.error('Delete failed:', err);
       });
   }
-
 
   onToggleVisibility(event: { page: StudyPage; newValue: boolean }) {
     this.studyPagesService.updateStudyPage(event.page.id, {

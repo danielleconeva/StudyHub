@@ -2,7 +2,7 @@
     <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
         <fieldset>
 
-            <!-- Header -->
+
             <div class="form-header">
                 <h1>StudyHub</h1>
                 <p>Welcome back</p>
@@ -11,52 +11,62 @@
                 </p>
             </div>
 
-            <!-- Global Firebase Error -->
+
             @if (errorService.message()) {
             <p class="firebase-error-msg error">{{ errorService.message() }}</p>
             }
 
-            <!-- Email -->
+
             <div class="form-group">
                 <label for="email">Email</label>
                 <input id="email" type="email" placeholder="Enter your email" formControlName="email"
-                    [class.input-error]="email?.errors?.['required'] && (email?.touched || email?.dirty)"
-                    [class.input-valid]="email?.valid && (email?.dirty || email?.touched)" />
-                @if (email?.errors?.['required'] && (email?.dirty || email?.touched)) {
-                <p class="error-msg">Email is required.</p>
+                    [class.input-error]="email?.invalid && (email?.touched || email?.dirty)"
+                    [class.input-valid]="email?.valid && (email?.touched || email?.dirty)" />
+                @if (email?.invalid && (email?.touched || email?.dirty)) {
+                <p class="error-msg">
+                    @if (email?.errors?.['required']) {
+                    Email is required.
+                    }
+                    @if (email?.errors?.['email']) {
+                    Invalid email format.
+                    }
+                </p>
                 }
             </div>
 
-            <!-- Password -->
+
             <div class="form-group">
                 <label for="password">Password</label>
                 <div class="password-wrapper">
                     <input id="password" [type]="showPassword ? 'text' : 'password'" placeholder="Enter your password"
                         formControlName="password"
-                        [class.input-error]="password?.invalid && (password?.dirty || password?.touched)"
-                        [class.input-valid]="!password?.errors && password?.value?.length >= 6 && (password?.dirty || password?.touched)" />
-
+                        [class.input-error]="password?.invalid && (password?.touched || password?.dirty)"
+                        [class.input-valid]="password?.valid && (password?.touched || password?.dirty)" />
                     <span class="password-toggle" (click)="showPassword = !showPassword"
                         title="Toggle password visibility">
                         <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                     </span>
                 </div>
-                @if (password?.invalid && (password?.dirty || password?.touched)) {
+                @if (password?.invalid && (password?.touched || password?.dirty)) {
                 <p class="error-msg">
-                    @if (password?.errors?.['required']) { Password is required. }
-                    @if (password?.errors?.['minlength']) { At least 6 characters required. }
+                    @if (password?.errors?.['required']) {
+                    Password is required.
+                    }
+                    @if (password?.errors?.['minlength']) {
+                    At least 6 characters required.
+                    }
                 </p>
                 }
             </div>
 
-            <!-- Submit Button -->
+
             <div class="form-actions">
                 <button type="submit" [disabled]="signInForm.invalid || isSubmitting">
                     {{ isSubmitting ? 'Signing in...' : 'Sign In' }}
                 </button>
             </div>
 
-            <!-- Navigation -->
+
             <div class="form-footer">
                 <p>
                     Don’t have an account?

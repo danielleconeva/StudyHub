@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { StudyPagesService } from '../../../core/services/study-pages.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { StudyPage, SyllabusItem } from '../../../models/study-page.model';
 
 @Component({
@@ -17,6 +18,7 @@ export class EditStudyPage implements OnInit {
   private studyPagesService = inject(StudyPagesService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   pageId = signal<string | null>(null);
 
@@ -47,13 +49,21 @@ export class EditStudyPage implements OnInit {
         return;
       }
 
+      const currentUserId = this.authService.getCurrentUserId();
+
+      if (!currentUserId || page.ownerId !== currentUserId) {
+        alert('You are not authorized to edit this page.');
+        this.router.navigate(['/not-found']);
+        return;
+      }
+
+
       this.title.set(page.title);
       this.subject.set(page.subject);
       this.visibility.set(page.isPublic ? 'public' : 'private');
       this.notes.set(page.notes);
       this.syllabus.set(page.syllabus || []);
       this.resources.set((page.resources || []).map(r => r.toString()));
-
     });
   }
 

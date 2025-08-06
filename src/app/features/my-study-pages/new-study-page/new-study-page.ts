@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { StudyPagesService } from '../../../core/services/study-pages.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { StudyPage, SyllabusItem } from '../../../models/study-page.model';
 
 @Component({
@@ -26,7 +27,8 @@ export class NewStudyPage {
 
   constructor(
     private router: Router,
-    private studyPagesService: StudyPagesService
+    private studyPagesService: StudyPagesService,
+    private authService: AuthService
   ) { }
 
   addSyllabusItem() {
@@ -83,7 +85,14 @@ export class NewStudyPage {
       return;
     }
 
-    const newPage: Omit<StudyPage, 'id' | 'ownerId'> = {
+    const ownerId = this.authService.getCurrentUserId();
+
+    if (!ownerId) {
+      alert('You must be logged in to create a study page.');
+      return;
+    }
+
+    const newPage: Omit<StudyPage, 'id'> = {
       title,
       subject,
       syllabus: this.syllabus(),
@@ -91,7 +100,8 @@ export class NewStudyPage {
       createdAt: new Date().toISOString(),
       resources: this.resources(),
       notes,
-      likesCount: 0
+      likesCount: 0,
+      ownerId
     };
 
     this.studyPagesService.addPage(newPage).then(() => {

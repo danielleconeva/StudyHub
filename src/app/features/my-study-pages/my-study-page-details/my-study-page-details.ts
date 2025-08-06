@@ -5,7 +5,7 @@ import {
   signal,
   OnInit
 } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Timestamp } from '@angular/fire/firestore';
@@ -23,6 +23,7 @@ import { Comment } from '../../../models/comment.model';
 })
 export class MyStudyPageDetails implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private studyPagesService = inject(StudyPagesService);
   private auth = inject(Auth);
 
@@ -54,6 +55,15 @@ export class MyStudyPageDetails implements OnInit {
 
       this.pageId.set(id);
       await this.checkUser();
+
+      const userId = this.currentUserId();
+      const currentPage = this.page();
+
+      if (!currentPage || currentPage.ownerId !== userId) {
+        alert('You are not authorized to view this page.');
+        this.router.navigateByUrl('/not-found');
+        return;
+      }
     });
   }
 
@@ -108,6 +118,7 @@ export class MyStudyPageDetails implements OnInit {
 
     return '';
   }
+
   async toggleSyllabusItem(index: number) {
     const current = this.page();
     if (!current || !current.id || !current.syllabus) return;
@@ -126,5 +137,4 @@ export class MyStudyPageDetails implements OnInit {
       console.error('Failed to update syllabus:', error);
     }
   }
-
 }
