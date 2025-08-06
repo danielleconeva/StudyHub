@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { StudyPagesService } from '../../core/services/study-pages.service';
 import { AuthService, User } from '../../core/services/auth.service';
@@ -11,22 +11,17 @@ import { Like } from '../../models/like.model';
 import { Timestamp } from '@angular/fire/firestore';
 import { StudyPageItem } from './study-page-item/study-page-item';
 
-
 @Component({
   selector: 'app-explore-pages',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    StudyPageItem
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, StudyPageItem],
   templateUrl: './explore-pages.html',
-  styleUrl: './explore-pages.css'
+  styleUrl: './explore-pages.css',
 })
 export class ExplorePages {
   private studyPageService = inject(StudyPagesService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   studyPages = this.studyPageService.getStudyPages();
   comments = this.studyPageService.getComments();
@@ -39,9 +34,10 @@ export class ExplorePages {
   visibleCount = signal(4);
 
   isLoggedIn = this.authService.isLoggedIn;
+  currentUserId = computed(() => this.authService.currentUser()?.id ?? '');
 
   constructor() {
-    this.authService.getAllUsers().subscribe(userList => {
+    this.authService.getAllUsers().subscribe((userList) => {
       this.users.set(userList);
     });
 
@@ -58,28 +54,24 @@ export class ExplorePages {
       );
       this.likedPages.set(likedSet);
     });
-
-    effect(() => {
-      console.log('📘 Study pages:', this.studyPages());
-    });
   }
 
   getAuthorName(ownerId: string): string {
-    const user = this.users().find(u => u.id === ownerId);
+    const user = this.users().find((u) => u.id === ownerId);
     return user?.username ?? 'Anonymous';
   }
 
   getSubjects(): string[] {
     const subjects = new Set(
       (this.studyPages() ?? [])
-        .filter(p => p?.subject)
-        .map(p => p.subject)
+        .filter((p) => p?.subject)
+        .map((p) => p.subject)
     );
     return ['All Subjects', ...Array.from(subjects)];
   }
 
   getCommentCount(pageId: string): number {
-    return this.comments()?.filter(c => c.pageId === pageId).length ?? 0;
+    return this.comments()?.filter((c) => c.pageId === pageId).length ?? 0;
   }
 
   formatDate(timestamp: string | Timestamp): string {
@@ -91,28 +83,38 @@ export class ExplorePages {
   }
 
   loadMore() {
-    this.visibleCount.update(count => count + 4);
+    this.visibleCount.update((count) => count + 4);
   }
 
-  filteredPages = computed(() => {
+  allFilteredPages = computed(() => {
     const all = this.studyPages() ?? [];
     if (!Array.isArray(all) || all.length === 0) return [];
 
-    const filtered = all
-      .filter(p => p?.isPublic === true)
-      .filter(p =>
-        this.selectedSubject() === 'All Subjects' || p.subject === this.selectedSubject()
+    return all
+      .filter((p) => p?.isPublic === true)
+      .filter(
+        (p) =>
+          this.selectedSubject() === 'All Subjects' ||
+          p.subject === this.selectedSubject()
       )
-      .filter(p =>
-        (p.title?.toLowerCase() ?? '').includes(this.searchQuery().toLowerCase()) ||
-        (p.notes?.toLowerCase() ?? '').includes(this.searchQuery().toLowerCase())
+      .filter(
+        (p) =>
+          (p.title?.toLowerCase() ?? '').includes(
+            this.searchQuery().toLowerCase()
+          ) ||
+          (p.notes?.toLowerCase() ?? '').includes(
+            this.searchQuery().toLowerCase()
+          )
       )
-      .map(p => ({
+      .map((p) => ({
         ...p,
-        notes: typeof p.notes === 'string' ? p.notes : ''
+        notes: typeof p.notes === 'string' ? p.notes : '',
       }));
+  });
 
-    return this.sortPages(filtered).slice(0, this.visibleCount());
+  filteredPages = computed(() => {
+    const pages = this.sortPages(this.allFilteredPages());
+    return pages.slice(0, this.visibleCount());
   });
 
   private sortPages(pages: StudyPage[]) {
@@ -127,7 +129,9 @@ export class ExplorePages {
 
     switch (this.sortOption()) {
       case 'Most Popular':
-        return [...pages].sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0));
+        return [...pages].sort(
+          (a, b) => (b.likesCount || 0) - (a.likesCount || 0)
+        );
       case 'Newest':
         return [...pages].sort((a, b) => {
           const aDate = getMillis(a.createdAt);
@@ -143,20 +147,51 @@ export class ExplorePages {
     const userId = this.authService.getCurrentUserId();
     if (!userId) return;
 
-    this.studyPageService.toggleLike(page.id, userId).then(action => {
-      const updatedSet = new Set(this.likedPages());
+    this.studyPageService
+      .toggleLike(page.id, userId)
+      .then((action) => {
+        const updatedSet = new Set(this.likedPages());
 
-      if (action === 'liked') {
-        updatedSet.add(page.id);
-        page.likesCount = (page.likesCount || 0) + 1;
-      } else {
-        updatedSet.delete(page.id);
-        page.likesCount = Math.max((page.likesCount || 1) - 1, 0);
-      }
+        if (action === 'liked') {
+          updatedSet.add(page.id);
+          page.likesCount = (page.likesCount || 0) + 1;
+        } else {
+          updatedSet.delete(page.id);
+          page.likesCount = Math.max((page.likesCount || 1) - 1, 0);
+        }
 
-      this.likedPages.set(updatedSet);
-    }).catch(err => {
-      console.error('Like toggle failed:', err);
-    });
+        this.likedPages.set(updatedSet);
+      })
+      .catch((err) => {
+        console.error('Like toggle failed:', err);
+      });
+  }
+
+  // ✅ Navigate to edit page
+  handleEdit(page: StudyPage) {
+    this.router.navigate(['/my-study-pages/edit', page.id]);
+  }
+
+  // ✅ Confirm + delete only if owned
+  handleDelete(page: StudyPage) {
+    const userId = this.currentUserId();
+    if (page.ownerId !== userId) {
+      alert("You are not allowed to delete this page.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the study page "${page.title}"? This action cannot be undone.`
+    );
+
+    if (!confirmDelete) return;
+
+    this.studyPageService.deleteStudyPage(page.id)
+      .then(() => {
+        console.log('Deleted:', page.id);
+      })
+      .catch((err) => {
+        console.error('Delete failed:', err);
+      });
   }
 }

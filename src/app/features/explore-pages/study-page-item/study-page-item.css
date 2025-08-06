@@ -22,16 +22,44 @@
 
 .page-title {
   font-size: 1.25rem;
-  color: #111827;
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  color: #111827;
+  margin: 0; /* Remove bottom margin to keep alignment clean */
   line-height: 1.3;
-  transition: color 0.3s ease;
+  flex: 1; /* Push buttons to far right */
 }
 
 .page-title:hover {
   color: #6366f1;
 }
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Key: align to top edge */
+  gap: 1rem;
+}
+
+.card-owner-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.2rem; /* Tweak for pixel-perfect vertical alignment */
+}
+
+.btn.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: background 0.2s ease;
+}
+
+.btn.icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
 
 .page-description {
   font-size: 0.95rem;

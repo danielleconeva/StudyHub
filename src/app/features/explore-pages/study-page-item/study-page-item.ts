@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { StudyPage } from '../../../models/study-page.model';
 import { Timestamp } from '@angular/fire/firestore';
-import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-study-page-item',
@@ -18,8 +17,11 @@ export class StudyPageItem {
   @Input() commentCount: number = 0;
   @Input() isLiked: boolean = false;
   @Input() isLoggedIn: boolean = false;
+  @Input() currentUserId!: string; // ✅ New input
 
   @Output() like = new EventEmitter<StudyPage>();
+  @Output() edit = new EventEmitter<StudyPage>();   // ✅ Emits edit request
+  @Output() delete = new EventEmitter<StudyPage>(); // ✅ Emits delete request
 
   constructor(
     private router: Router,
@@ -33,10 +35,6 @@ export class StudyPageItem {
 
   handleLikeClick() {
     if (!this.isLoggedIn) return;
-    this.onLikeClick();
-  }
-
-  onLikeClick() {
     this.like.emit(this.page);
   }
 
@@ -44,5 +42,19 @@ export class StudyPageItem {
     this.router.navigate(['/explore', pageId]).then(() => {
       this.scroller.scrollToPosition([0, 0]);
     });
+  }
+
+  // ✅ Button event handlers
+  handleEdit() {
+    this.edit.emit(this.page);
+  }
+
+  handleDelete() {
+    this.delete.emit(this.page);
+  }
+
+  // ✅ Utility to check if current user owns the page
+  isOwner(): boolean {
+    return this.page.ownerId === this.currentUserId && this.page.isPublic;
   }
 }

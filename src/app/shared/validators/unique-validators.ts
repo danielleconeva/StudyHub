@@ -12,7 +12,7 @@ import { AuthService } from '../../core/services/auth.service';
 export function usernameTakenValidator(authService: AuthService): AsyncValidatorFn {
     return (control: AbstractControl) => {
         return of(control.value).pipe(
-            debounceTime(1500), // ⏳ wait 1.5 seconds after user stops typing
+            debounceTime(1500), //
             switchMap((username) => {
                 if (!username?.trim()) return of(null);
                 return authService.getAllUsers().pipe(
@@ -33,7 +33,7 @@ export function usernameTakenValidator(authService: AuthService): AsyncValidator
 export function emailTakenValidator(authService: AuthService): AsyncValidatorFn {
     return (control: AbstractControl) => {
         return of(control.value).pipe(
-            debounceTime(1500), // ⏳ wait 1.5 seconds after user stops typing
+            debounceTime(1500),
             switchMap((email) => {
                 if (!email?.trim()) return of(null);
                 return authService.getAllUsers().pipe(

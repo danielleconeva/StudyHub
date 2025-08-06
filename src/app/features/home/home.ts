@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service'; // adjust the path as needed
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-home',

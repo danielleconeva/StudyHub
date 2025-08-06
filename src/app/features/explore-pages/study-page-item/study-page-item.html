@@ -1,7 +1,17 @@
 <div class="page-card">
 
     <div class="card-header">
-        <h2 class="page-title">{{ page.title || 'Untitled' }}</h2>
+        <!-- Title + Buttons Row -->
+        <div class="header-row">
+            <h2 class="page-title">{{ page.title || 'Untitled' }}</h2>
+
+            <div class="card-owner-actions" *ngIf="page.isPublic && page.ownerId === currentUserId">
+                <button class="btn icon-btn" (click)="handleEdit()">✏️</button>
+                <button class="btn icon-btn" (click)="handleDelete()">🗑️</button>
+            </div>
+        </div>
+
+        <!-- Description -->
         <p class="page-description">
             {{
             page.notes
@@ -13,12 +23,14 @@
         </p>
     </div>
 
+    <!-- Tags -->
     <div class="tags">
         <span class="tag" *ngFor="let tag of (page.syllabus?.slice(0, 3) || [])">
             {{ tag?.text || 'General' }}
         </span>
     </div>
 
+    <!-- Footer with Author and Date -->
     <div class="card-footer with-date">
         <div class="author">
             <div class="avatar">👤</div>
@@ -30,26 +42,24 @@
         <span class="date-text">{{ formatDate(page.createdAt) }}</span>
     </div>
 
+    <!-- Bottom Row: Likes, Comments, View -->
     <div class="card-bottom-row">
         <div class="meta-stats">
-
             <span class="meta-button likes" [class.clickable]="isLoggedIn" [class.liked]="isLiked"
                 [class.disabled]="!isLoggedIn" (click)="handleLikeClick()">
                 ❤️ {{ page.likesCount }}
             </span>
-
 
             <a class="meta-button comments clickable" [routerLink]="['/explore', page.id]" [fragment]="'comments'">
                 💬 {{ commentCount }}
             </a>
         </div>
 
-
         <div class="card-actions">
-
             <a [routerLink]="['/explore', page.id]" (click)="navigateToPage(page.id)" class="view-btn">
                 View Page
             </a>
         </div>
     </div>
+
 </div>

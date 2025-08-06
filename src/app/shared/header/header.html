@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="navbar-left">
     <a class="logo" routerLink="/">
-      <i class="far fa-clock"></i>
+      <i class="fi fi-rr-handshake"></i>
       <span class="logo-text">StudyHub</span>
     </a>
   </div>
@@ -32,18 +32,19 @@
       }
     </ul>
 
-    @if (!isLoggedIn()) {
+    @if (isLoggedIn()) {
+    <span class="welcome">Welcome, {{ username() }}!</span>
+    <button class="logout-button" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+    } @else {
     <a routerLink="/sign-in" class="auth-link">
       <i class="fas fa-sign-in-alt"></i> Sign In
     </a>
     <a routerLink="/sign-up" class="auth-button">
       <i class="fas fa-user-plus"></i> Sign Up
     </a>
-    } @else {
-    <span class="welcome">Welcome, {{ username() }}!</span>
-    <button class="logout-button" (click)="logout()">
-      <i class="fas fa-sign-out-alt"></i> Logout
-    </button>
     }
+
   </div>
 </nav>
