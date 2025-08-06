@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Subtask {
   text: string;
   done: boolean;
@@ -11,6 +13,6 @@ export interface Task {
   priority: 'low' | 'medium' | 'high';
   progress: number;
   subtasks: Subtask[];
-  createdAt: string;
+  due: Timestamp;
   completed: boolean;
 }

@@ -1,0 +1,58 @@
+<div class="task-card">
+
+    <div class="card-header">
+
+        <h2 class="task-title">{{ task.title }}</h2>
+
+
+        <div class="header-actions">
+            <span class="priority-badge" [ngClass]="task.priority">
+                <ng-container [ngSwitch]="task.priority">
+                    <span *ngSwitchCase="'high'">High</span>
+                    <span *ngSwitchCase="'medium'">Medium</span>
+                    <span *ngSwitchCase="'low'">Low</span>
+                </ng-container>
+            </span>
+
+
+            <div class="actions" *ngIf="isLoggedIn">
+                <button class="btn icon-btn" (click)="onEditClick()">✏️</button>
+                <button class="btn icon-btn" (click)="onDeleteTask()">🗑️</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="progress-section">
+        <p class="progress-label-heading">Progress</p>
+        <div class="progress-bar-wrapper">
+            <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getCalculatedProgress()"></div>
+            </div>
+            <span class="progress-label">{{ getCalculatedProgress() }}%</span>
+        </div>
+    </div>
+
+
+    <div class="subtask-section">
+        <p class="subtask-label">Subtasks</p>
+        <div class="subtask-list">
+            <div *ngFor="let subtask of task.subtasks; let i = index" class="subtask-item">
+                <input type="checkbox" [checked]="subtask.done" (change)="onToggleSubtask(i)"
+                    [disabled]="!isLoggedIn" />
+                <label>{{ subtask.text }}</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="task-footer">
+        <span class="subject-badge">
+            <i class="fas fa-book-open"></i> {{ task.subject }}
+        </span>
+        <span class="due-date">
+            <i class="far fa-calendar-alt"></i>
+            Due: {{ task.due.toDate() | date: 'mediumDate' }}
+        </span>
+    </div>
+</div>

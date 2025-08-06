@@ -1,0 +1,40 @@
+<div class="tasks-container">
+
+    <div class="header">
+        <h1 class="title">Tasks</h1>
+        <p class="subtitle">Organize and track your study tasks</p>
+    </div>
+
+    <div class="top-controls">
+
+        <input type="text" class="search-input" placeholder="Search tasks..." [ngModel]="searchQueryValue"
+            (ngModelChange)="updateSearchQuery($event)" />
+
+        <select class="filter-select" [ngModel]="selectedSubjectValue" (ngModelChange)="updateSelectedSubject($event)">
+            <option *ngFor="let subject of getSubjects()" [value]="subject">
+                {{ subject }}
+            </option>
+        </select>
+
+        <select class="filter-select" [ngModel]="selectedPriorityValue"
+            (ngModelChange)="updateSelectedPriority($event)">
+            <option *ngFor="let priority of getPriorities()" [value]="priority">
+                {{ priority }}
+            </option>
+        </select>
+
+        <button class="new-task-button" (click)="onCreateNewTask()">+ New Task</button>
+    </div>
+
+    <div class="task-list">
+        <app-task-item *ngFor="let task of filteredTasks()" [task]="task" [author]="getAuthorName(task.ownerId)"
+            [isLoggedIn]="isLoggedIn()" (toggleSubtask)="handleToggleSubtask($event)"
+            (addSubtask)="onAddSubtask($event)" (edit)="onEditTask($event)" (deleteTask)="onDeleteTask($event)">
+        </app-task-item>
+
+    </div>
+
+    <div class="load-more-wrapper" *ngIf="showLoadMore()">
+        <button class="load-more-button" (click)="loadMore()">Load More</button>
+    </div>
+</div>

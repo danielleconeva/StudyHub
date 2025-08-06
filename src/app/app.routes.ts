@@ -63,6 +63,21 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'tasks',
+    loadComponent: () =>
+      import('./features/tasks/tasks').then(
+        (m) => m.Tasks)
+  },
+  {
+    path: 'tasks/new',
+    loadComponent: () => import('./features/tasks/new-task/new-task').then(m => m.NewTask)
+  },
+  {
+    path: 'tasks/edit/:id',
+    loadComponent: () =>
+      import('./features/tasks/edit-task/edit-task').then((m) => m.EditTask),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./shared/not-found/not-found').then((m) => m.NotFound),

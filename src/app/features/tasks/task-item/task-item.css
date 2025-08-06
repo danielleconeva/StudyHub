@@ -1,0 +1,296 @@
+ 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+ 
+.task-card {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+ 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.task-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+  word-break: break-word;
+}
+
+ 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+ 
+.priority-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(6px);
+  border: 1px solid transparent;
+  opacity: 0.85;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+
+.priority-badge.high {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.priority-badge.medium {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: #92400e;
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.priority-badge.low {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #065f46;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+ 
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn.icon-btn {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: #f3f4f6;
+  color: #111827;
+  transition: background 0.2s;
+}
+
+.btn.icon-btn:hover {
+  background-color: #e5e7eb;
+}
+
+.btn.icon-btn.delete {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+.btn.icon-btn.delete:hover {
+  background-color: #fecaca;
+}
+
+ 
+.progress-section {
+  margin-bottom: 16px;
+}
+
+.progress-label-heading {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.progress-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  min-width: 2px;
+}
+
+.progress-fill[style*="0%"] {
+  min-width: 2px !important;
+}
+
+.progress-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  min-width: 35px;
+  text-align: right;
+}
+
+ 
+.subtask-section {
+  margin-bottom: 16px;
+}
+
+.subtask-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.subtask-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.subtask-item:last-child {
+  border-bottom: none;
+}
+
+.subtask-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background: white;
+  position: relative;
+}
+
+.subtask-item input[type="checkbox"]:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.subtask-item input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.subtask-item input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.subtask-item label {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+  flex: 1;
+  transition: color 0.2s ease;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.subtask-item:has(input[type="checkbox"]:checked) label {
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+ 
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: auto;
+}
+
+.subject-badge {
+  background-color: #e0e7ff;
+  color: #3730a3;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.due-date {
+  font-size: 12px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .task-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .progress-bar-wrapper {
+    gap: 8px;
+  }
+
+  .progress-label {
+    font-size: 12px;
+  }
+
+  .subject-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .btn.icon-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
