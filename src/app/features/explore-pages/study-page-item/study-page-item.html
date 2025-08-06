@@ -47,11 +47,11 @@
         <div class="meta-stats">
             <span class="meta-button likes" [class.clickable]="isLoggedIn" [class.liked]="isLiked"
                 [class.disabled]="!isLoggedIn" (click)="handleLikeClick()">
-                ❤️ {{ page.likesCount }}
+                <i class="fas fa-heart"></i> {{ page.likesCount }}
             </span>
 
             <a class="meta-button comments clickable" [routerLink]="['/explore', page.id]" [fragment]="'comments'">
-                💬 {{ commentCount }}
+                <i class="fas fa-comment-alt"></i> {{ commentCount }}
             </a>
         </div>
 

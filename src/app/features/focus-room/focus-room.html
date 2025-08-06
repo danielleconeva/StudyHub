@@ -21,7 +21,7 @@
 
         <!-- MOTIVATION QUOTE CARD -->
         <article class="card motivation">
-            <h2>📖 Daily Motivation</h2>
+            <h2><i class="fas fa-book-open"></i>Daily Motivation</h2>
             <blockquote class="quote">
                 {{ dailyQuote }}
             </blockquote>
@@ -29,7 +29,6 @@
 
         <!-- TIMER CARD -->
         <article class="card timer">
-            <h2 class="visually-hidden">Pomodoro Timer</h2>
 
             <div class="static-timer-ring">
                 <div class="circle-border">
@@ -47,7 +46,7 @@
 
         <!-- AMBIENT SOUNDS CARD -->
         <article class="card sounds">
-            <h2>🔊 Ambient Sounds</h2>
+            <h2> <i class="fas fa-volume-up"></i>Ambient Sounds</h2>
             <div class="sound-buttons">
                 <button *ngFor="let sound of sounds" [class.active]="sound === selectedSound()"
                     (click)="selectSound(sound)">
