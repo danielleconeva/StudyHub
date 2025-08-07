@@ -1,20 +1,23 @@
  
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
- 
 .task-card {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: white;
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  margin-bottom: 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   transition: all 0.2s ease;
-  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--gradient-glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid hsl(var(--border) / 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
-  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.6s ease-out;
 }
 
  
@@ -22,13 +25,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 0.1rem;
 }
 
 .task-title {
   font-size: 20px;
   font-weight: 600;
-  color: #111827;
+  color: #626875;
   margin: 0;
   line-height: 1.4;
   flex: 1;
@@ -46,7 +49,7 @@
 .priority-badge {
   font-size: 12px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 6px 14px;
   border-radius: 9999px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -78,18 +81,17 @@
  
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 0.3rem;
 }
 
 .btn.icon-btn {
-  font-size: 13px;
-  padding: 4px 10px;
-  border-radius: 4px;
+background: transparent;
   border: none;
+  font-size: 1rem;
+  color: #5a5f69;
   cursor: pointer;
-  background-color: #f3f4f6;
-  color: #111827;
-  transition: background 0.2s;
+  padding: 0.4rem;
+  transition: background 0.2s ease;
 }
 
 .btn.icon-btn:hover {
@@ -107,7 +109,7 @@
 
  
 .progress-section {
-  margin-bottom: 16px;
+  margin-bottom: 0.1rem;
 }
 
 .progress-label-heading {
@@ -133,7 +135,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+  background: var(--gradient-primary);
   border-radius: 4px;
   transition: width 0.3s ease;
   min-width: 2px;
@@ -153,7 +155,7 @@
 
  
 .subtask-section {
-  margin-bottom: 16px;
+  margin-bottom: 0.1rem;
 }
 
 .subtask-label {
@@ -173,18 +175,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 0;
+  padding-bottom: 0.1rem;
   border-bottom: 1px solid #f3f4f6;
 }
 
 .subtask-item:last-child {
   border-bottom: none;
+  margin-bottom: 0.5rem;
 }
 
 .subtask-item input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  border: 2px solid #d1d5db;
+  border: 0.2px solid #d1d5db;
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -194,8 +197,7 @@
 }
 
 .subtask-item input[type="checkbox"]:checked {
-  background-color: #10b981;
-  border-color: #10b981;
+  background-color: #6c85d0;
 }
 
 .subtask-item input[type="checkbox"]:checked::after {
@@ -242,7 +244,7 @@
 
 .subject-badge {
   background-color: #e0e7ff;
-  color: #3730a3;
+  color: #8e83d1;
   padding: 4px 12px;
   border-radius: 9999px;
   font-size: 12px;

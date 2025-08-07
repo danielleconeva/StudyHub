@@ -17,11 +17,11 @@ export class StudyPageItem {
   @Input() commentCount: number = 0;
   @Input() isLiked: boolean = false;
   @Input() isLoggedIn: boolean = false;
-  @Input() currentUserId!: string; // ✅ New input
+  @Input() currentUserId!: string;
 
   @Output() like = new EventEmitter<StudyPage>();
-  @Output() edit = new EventEmitter<StudyPage>();   // ✅ Emits edit request
-  @Output() delete = new EventEmitter<StudyPage>(); // ✅ Emits delete request
+  @Output() edit = new EventEmitter<StudyPage>();
+  @Output() delete = new EventEmitter<StudyPage>();
 
   constructor(
     private router: Router,
@@ -44,7 +44,6 @@ export class StudyPageItem {
     });
   }
 
-  // ✅ Button event handlers
   handleEdit() {
     this.edit.emit(this.page);
   }
@@ -53,7 +52,6 @@ export class StudyPageItem {
     this.delete.emit(this.page);
   }
 
-  // ✅ Utility to check if current user owns the page
   isOwner(): boolean {
     return this.page.ownerId === this.currentUserId && this.page.isPublic;
   }

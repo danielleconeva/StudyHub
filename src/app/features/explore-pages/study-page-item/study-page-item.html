@@ -1,17 +1,20 @@
 <div class="page-card">
 
     <div class="card-header">
-        <!-- Title + Buttons Row -->
         <div class="header-row">
             <h2 class="page-title">{{ page.title || 'Untitled' }}</h2>
 
             <div class="card-owner-actions" *ngIf="page.isPublic && page.ownerId === currentUserId">
-                <button class="btn icon-btn" (click)="handleEdit()">✏️</button>
-                <button class="btn icon-btn" (click)="handleDelete()">🗑️</button>
+                <button class="btn icon-btn" (click)="handleEdit()">
+                    <i class="fas fa-pen"></i>
+                </button>
+
+                <button class="btn icon-btn" (click)="handleDelete()">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
             </div>
         </div>
 
-        <!-- Description -->
         <p class="page-description">
             {{
             page.notes
@@ -23,14 +26,12 @@
         </p>
     </div>
 
-    <!-- Tags -->
     <div class="tags">
         <span class="tag" *ngFor="let tag of (page.syllabus?.slice(0, 3) || [])">
             {{ tag?.text || 'General' }}
         </span>
     </div>
 
-    <!-- Footer with Author and Date -->
     <div class="card-footer with-date">
         <div class="author">
             <div class="avatar">👤</div>
@@ -42,7 +43,6 @@
         <span class="date-text">{{ formatDate(page.createdAt) }}</span>
     </div>
 
-    <!-- Bottom Row: Likes, Comments, View -->
     <div class="card-bottom-row">
         <div class="meta-stats">
             <span class="meta-button likes" [class.clickable]="isLoggedIn" [class.liked]="isLiked"

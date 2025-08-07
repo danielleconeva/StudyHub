@@ -3,19 +3,24 @@
     <div class="card-header">
         <div class="badges">
             <span class="badge subject">{{ subject }}</span>
-            <span class="status-badge" [ngClass]="{ 'published': isPublic, 'private': !isPublic }">{{
-                visibilityStatus}}</span>
+            <span class="status-badge" [ngClass]="{ 'published': isPublic, 'private': !isPublic }">
+                {{ visibilityStatus }}
+            </span>
         </div>
         <div class="actions">
             <button class="btn view-btn" (click)="navigateToPage(page.id)">View Page</button>
-            <button class="btn icon-btn" (click)="handleEdit()">✏️</button>
-            <button class="btn icon-btn" (click)="handleDelete()">🗑️</button>
+            <button class="btn icon-btn" (click)="handleEdit()">
+                <i class="fas fa-pen"></i>
+            </button>
+            <button class="btn icon-btn" (click)="handleDelete()">
+                <i class="fas fa-trash-alt"></i>
+            </button>
         </div>
     </div>
 
     <h2 class="page-title">{{ page.title }}</h2>
 
-    <p class="page-notes">{{ page.notes | slice:0:150 }}{{ page.notes.length > 150 ? '...' : '' }}</p>
+    <p class="page-notes">{{ page.notes | slice: 0:150 }}{{ page.notes.length > 150 ? '...' : '' }}</p>
 
     <div class="tag-badges">
         <span *ngFor="let tag of tags" class="tag">{{ tag }}</span>
@@ -23,16 +28,22 @@
 
     <div class="card-footer">
         <div class="info">
-            <span class="likes">❤️ {{ likes }}</span>
+            <span class="likes">
+                <i class="fas fa-heart"></i> {{ likes }}
+            </span>
             <span class="date">{{ formatDate(page.createdAt) }}</span>
         </div>
+
         <div class="footer-actions">
             <div class="toggle-container">
                 <button class="toggle-switch" [ngClass]="{ 'public': isPublic }" (click)="handleToggleVisibility()"
                     [title]="isPublic ? 'Make Private' : 'Make Public'">
                 </button>
-                <span class="visibility-emoji">{{ isPublic ? '🌐' : '🔒' }}</span>
+                <span class="visibility-emoji">
+                    <i [ngClass]="isPublic ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                </span>
             </div>
         </div>
     </div>
+
 </div>

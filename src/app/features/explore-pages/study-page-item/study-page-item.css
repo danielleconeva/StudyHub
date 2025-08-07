@@ -24,9 +24,9 @@ background: var(--gradient-glass);
   font-size: 1.25rem;
   font-weight: 600;
   color: #343b49;
-  margin: 0; /* Remove bottom margin to keep alignment clean */
+  margin: 0;
   line-height: 1.3;
-  flex: 1; /* Push buttons to far right */
+  flex: 1;
 }
 
 .page-title:hover {
@@ -36,14 +36,14 @@ background: var(--gradient-glass);
 .header-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Key: align to top edge */
+  align-items: flex-start;
   gap: 1rem;
 }
 
 .card-owner-actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.2rem; /* Tweak for pixel-perfect vertical alignment */
+  margin-top: 0.2rem;
 }
 
 .btn.icon-btn {
@@ -156,7 +156,7 @@ background: var(--gradient-glass);
   padding: 0.25rem 0.7rem;
   font-size: 0.9rem;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 20px;
   background: rgba(243, 244, 246, 0.8);
   color: #6b7280;
   border: none;
@@ -175,7 +175,13 @@ background: var(--gradient-glass);
 
 .meta-button.likes.liked {
   color: #dc2626;
-  background: rgba(254, 226, 226, 0.8);
+  background: rgba(250, 231, 231, 0.884);
+}
+.icon-btn {
+  font-size: 0.9rem;
+  color: #5d636e;
+  transition: color 0.2s ease;
+
 }
 
 .meta-button.likes.disabled {

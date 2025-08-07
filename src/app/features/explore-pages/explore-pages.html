@@ -1,5 +1,4 @@
 <div class="explore-container">
-    <!-- Header -->
     <div class="header">
         <h1 class="title">Explore</h1>
         <p class="subtitle">
@@ -7,7 +6,6 @@
         </p>
     </div>
 
-    <!-- Filters -->
     <div class="controls">
         <input type="text" class="search-input" placeholder="Search study pages..." [ngModel]="searchQuery()"
             (ngModelChange)="searchQuery.set($event)" />
@@ -24,7 +22,6 @@
         </select>
     </div>
 
-    <!-- Study Page Grid -->
     <div class="page-grid">
         <app-study-page-item *ngFor="let page of filteredPages()" [page]="page" [author]="getAuthorName(page.ownerId)"
             [commentCount]="getCommentCount(page.id)" [isLiked]="likedPages().has(page.id)" [isLoggedIn]="isLoggedIn()"
@@ -33,7 +30,6 @@
 
     </div>
 
-    <!-- Load More Button -->
     <div class="load-more-wrapper" *ngIf="filteredPages().length < allFilteredPages().length">
         <button class="load-more-btn" (click)="loadMore()">Load More Pages</button>
     </div>

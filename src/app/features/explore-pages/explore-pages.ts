@@ -167,12 +167,10 @@ export class ExplorePages {
       });
   }
 
-  // ✅ Navigate to edit page
   handleEdit(page: StudyPage) {
     this.router.navigate(['/my-study-pages/edit', page.id]);
   }
 
-  // ✅ Confirm + delete only if owned
   handleDelete(page: StudyPage) {
     const userId = this.currentUserId();
     if (page.ownerId !== userId) {

@@ -1,42 +1,45 @@
-<div class="my-pages-container">
+<div class="wrapper">
+
+    <div class="my-pages-container">
 
 
-    <div class="header with-button">
-        <div class="heading-left">
-            <h1 class="title">My Study Pages</h1>
-            <p class="subtitle">Manage your study notes and control their visibility</p>
+        <div class="header with-button">
+            <div class="heading-left">
+                <h1 class="title">My Study Pages</h1>
+                <p class="subtitle">Manage your study notes and control their visibility</p>
+            </div>
+            <div class="new-page-wrapper">
+                <button class="new-page-btn" (click)="createNewPage()">+ New Page</button>
+            </div>
         </div>
-        <div class="new-page-wrapper">
-            <button class="new-page-btn" (click)="createNewPage()">+ New Page</button>
+
+
+        <div class="controls">
+            <input type="text" class="search-input" placeholder="Search your pages..." [ngModel]="searchQuery()"
+                (ngModelChange)="searchQuery.set($event)" />
+
+            <select class="filter-select" [ngModel]="selectedSubject()" (ngModelChange)="selectedSubject.set($event)">
+                <option *ngFor="let subject of getSubjects()" [value]="subject">{{ subject }}</option>
+            </select>
+
+            <select class="filter-select" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+                <option value="All Status">All Status</option>
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
+            </select>
         </div>
-    </div>
 
 
-    <div class="controls">
-        <input type="text" class="search-input" placeholder="Search your pages..." [ngModel]="searchQuery()"
-            (ngModelChange)="searchQuery.set($event)" />
-
-        <select class="filter-select" [ngModel]="selectedSubject()" (ngModelChange)="selectedSubject.set($event)">
-            <option *ngFor="let subject of getSubjects()" [value]="subject">{{ subject }}</option>
-        </select>
-
-        <select class="filter-select" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
-            <option value="All Status">All Status</option>
-            <option value="Published">Published</option>
-            <option value="Draft">Draft</option>
-        </select>
-    </div>
+        <div class="page-grid">
+            <app-my-study-page-item *ngFor="let page of filteredPages()" [page]="page" [isPublic]="page.isPublic"
+                [likes]="page.likesCount || 0" [subject]="page.subject" [tags]="extractTags(page)"
+                [visibility]="page.isPublic ? 'public' : 'private'" (edit)="onEdit($event)" (delete)="onDelete($event)"
+                (toggleVisibility)="onToggleVisibility($event)"></app-my-study-page-item>
+        </div>
 
 
-    <div class="page-grid">
-        <app-my-study-page-item *ngFor="let page of filteredPages()" [page]="page" [isPublic]="page.isPublic"
-            [likes]="page.likesCount || 0" [subject]="page.subject" [tags]="extractTags(page)"
-            [visibility]="page.isPublic ? 'public' : 'private'" (edit)="onEdit($event)" (delete)="onDelete($event)"
-            (toggleVisibility)="onToggleVisibility($event)"></app-my-study-page-item>
-    </div>
-
-
-    <div class="load-more-wrapper" *ngIf="filteredPages().length >= visibleCount()">
-        <button class="load-more-btn" (click)="loadMore()">Load More Pages</button>
+        <div class="load-more-wrapper" *ngIf="filteredPages().length >= visibleCount()">
+            <button class="load-more-btn" (click)="loadMore()">Load More Pages</button>
+        </div>
     </div>
 </div>
