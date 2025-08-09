@@ -132,4 +132,9 @@ export class FocusRoom {
       this.audioPlayer.volume = vol / 100;
     }
   }
+
+  ngOnDestroy() {
+    this.stopSound();
+    this.resetTimer();
+  }
 }

@@ -249,7 +249,7 @@ button[type="submit"]:hover:not([disabled]) {
   margin-top: 1.5rem;
 }
 
-/* Responsive */
+
 @media (max-width: 480px) {
   form {
     padding: 1.5rem;

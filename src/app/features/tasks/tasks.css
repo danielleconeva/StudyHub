@@ -1,13 +1,20 @@
 
+:host {
+  display: block;
+}
+
+
 .wrapper {
   padding: 2rem;
+  padding-top: calc(4rem + 1px); 
+  min-height: 100dvh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(180deg, #f8f9ff 0%, #e8ecff 100%);
+  background: var(--gradient-backdrop);
   position: relative;
   z-index: 0;
   overflow: hidden;
-  background: var(--gradient-backdrop);
 }
+
 
 .wrapper::before {
   content: '';
@@ -18,35 +25,32 @@
   animation: floatingGlass 20s ease-in-out infinite;
   border-radius: inherit;
   z-index: -1;
-} 
- 
+}
+
 .tasks-container {
-  margin: 4rem auto;
-  padding: 1rem 10rem;
+  margin: 0 auto;             
+  padding: 2rem 10rem 1rem;    
   color: #1e293b;
 }
 
- 
 .header {
-  margin-bottom: 2rem;
+  margin: 0 0 2rem;           
 }
 
 .title {
-  background: linear-gradient(to right, hsl(220 70% 60%), hsl(302, 60%, 65%));
+  background: linear-gradient(to right, hsl(220 70% 60%), hsl(302 60% 65%));
   font-size: 2.75rem;
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;            
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  margin-top: 0.3rem;
   line-height: 1.1;
   letter-spacing: -0.02em;
   font-family: 'Inter', sans-serif;
   display: inline-block;
 }
-
 
 .subtitle {
   font-size: 1.125rem;
@@ -63,9 +67,10 @@
   flex-wrap: wrap;
 }
 
+
 .search-input {
   flex: 1;
-  background: rgba(#F5F5F8, 0.8);
+ background: rgba(255, 255, 255, 0.8); 
   backdrop-filter: blur(12px);
   border: 1px solid rgba(209, 213, 219, 0.4);
   border-radius: 0.75rem;
@@ -74,7 +79,6 @@
   color: #374151;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
-  
 }
 
 .search-input:focus {
@@ -87,11 +91,10 @@
   color: #94a3b8;
 }
 
- 
 .filter-select {
   cursor: pointer;
   min-width: 140px;
-   background: rgba(#F5F5F8, 0.8);
+  background: rgba(245, 245, 248, 0.8); 
   backdrop-filter: blur(12px);
   border: 1px solid rgba(209, 213, 219, 0.4);
   border-radius: 0.75rem;
@@ -108,10 +111,9 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
- 
 .new-task-button {
-   padding: 0.75rem 1.5rem;
-    background: var(--gradient-primary);
+  padding: 0.75rem 1.5rem;
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: 12px;
@@ -127,13 +129,12 @@
 }
 
 .new-task-button:hover {
- filter: brightness(1.02); 
+  filter: brightness(1.02);
   box-shadow:
-    0 0 0 2px hsl(240 10% 60% / 0.2), 
-    0 4px 12px hsl(240 10% 40% / 0.15); 
-  transform: translateY(-0.5px)
+    0 0 0 2px hsl(240 10% 60% / 0.2),
+    0 4px 12px hsl(240 10% 40% / 0.15);
+  transform: translateY(-0.5px);
 }
-
 
 .task-list {
   display: flex;
@@ -141,7 +142,7 @@
   gap: 1.5rem;
 }
 
- 
+
 .load-more-wrapper {
   display: flex;
   justify-content: center;
@@ -166,20 +167,19 @@
 }
 
 
+@media (max-width: 1024px) {
+  .tasks-container { padding: 2rem 3rem 1rem; }
+}
+
 @media (max-width: 768px) {
   .tasks-container {
     padding: 1.5rem 1rem;
   }
-
-  .title {
-    font-size: 2.25rem;
-  }
-
+  .title { font-size: 2.25rem; }
   .top-controls {
     flex-direction: column;
     align-items: stretch;
   }
-
   .filter-select,
   .search-input {
     width: 100%;

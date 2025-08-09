@@ -1,4 +1,3 @@
-
 .form-wrapper::before {
   content: '';
   position: absolute;
@@ -22,6 +21,7 @@
   font-family: 'Inter', sans-serif;
   position: relative;
 }
+
 .glass-bubble {
   position: absolute;
   width: 8rem;
@@ -34,7 +34,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
+  box-shadow:
     0 8px 24px rgba(31, 38, 135, 0.08),
     inset 0 1px 1px rgba(255, 255, 255, 0.15);
   filter: none;
@@ -42,16 +42,9 @@
   transition: all 0.3s ease;
 }
 
-
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
 }
 
 form {
@@ -67,7 +60,6 @@ form {
   box-sizing: border-box;
 }
 
-
 fieldset {
   border: none;
   padding: 0;
@@ -82,7 +74,7 @@ fieldset {
 .form-header h1 {
   font-size: 1.6rem;
   font-weight: 800;
-  background: linear-gradient(to right, hsl(220 70% 60%), hsl(302, 60%, 65%));
+  background: linear-gradient(to right, hsl(220 70% 60%), hsl(302 60% 65%));
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -107,24 +99,25 @@ label {
   font-size: 0.9rem;
 }
 
+
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"] {
   width: 100%;
   padding: 0.75rem 1.25rem;
-  border: none; 
+  border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.4); 
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px);
   font-size: 0.95rem;
   color: #111;
-  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
   box-sizing: border-box;
   box-shadow:
     inset 0 1px 2px rgba(255, 255, 255, 0.2),
     0 1px 6px rgba(0, 0, 0, 0.06);
 }
-
 
 input:focus {
   outline: none;
@@ -135,6 +128,7 @@ input:focus {
 input::placeholder {
   color: #aaa;
 }
+
 
 input.input-valid {
   border: 1px solid #28a745 !important;
@@ -160,16 +154,18 @@ input.input-error {
   font-size: 0.875rem;
 }
 
-.firebase-error-msg.error {
-  color: #dc3545;
-}
+.firebase-error-msg.error { color: #dc3545; }
+.firebase-success-msg.success { color: #28a745; }
 
-.firebase-success-msg.success {
-  color: #28a745;
-}
 
 .password-wrapper {
   position: relative;
+  display: block;
+}
+
+
+.password-wrapper input {
+  padding-right: 2.5rem;
 }
 
 .password-toggle {
@@ -185,13 +181,10 @@ input.input-error {
   padding: 0;
 }
 
-.password-toggle:hover {
-  color: #333;
-}
+.password-toggle:hover { color: #333; }
 
-.form-actions {
-  margin-top: 1.5rem;
-}
+
+.form-actions { margin-top: 1.5rem; }
 
 button[type="submit"] {
   width: 100%;
@@ -199,7 +192,7 @@ button[type="submit"] {
   margin-top: 1rem;
   border: none;
   border-radius: 999px;
-   background: var(--gradient-primary);
+  background: var(--gradient-primary);
   color: white;
   font-weight: 600;
   font-size: 0.95rem;
@@ -231,16 +224,13 @@ button[type="submit"]:hover:not([disabled]) {
   transition: color 0.2s ease;
 }
 
-.form-footer a:hover {
-  color: #5a8ffa;
-}
+.form-footer a:hover { color: #5a8ffa; }
+
 .form-footer p {
   color: #4a4848;
   margin-top: 1.5rem;
 }
 
 @media (max-width: 480px) {
-  form {
-    padding: 1.5rem;
-  }
+  form { padding: 1.5rem; }
 }

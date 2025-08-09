@@ -1,13 +1,15 @@
 <section class="home-container">
 
-  <div class="glass-bubble" style="top: 6%; left: 10%;"></div>
-  <div class="glass-bubble" style="top: 41%; left: 18%;"></div>
-  <div class="glass-bubble" style="bottom: 18%; left: 10%;"></div>
-  <div class="glass-bubble" style="top: 16%; right: 8%;"></div>
-  <div class="glass-bubble" style="top: 58%; right: 8%;"></div>
-  <div class="glass-bubble" style="bottom: 2%; right: 22%;"></div>
 
-  <div class="content-wrapper">
+  <div class="glass-bubble" style="top: 6%; left: 10%;" @bubbleFadeIn></div>
+  <div class="glass-bubble" style="top: 41%; left: 18%;" @bubbleFadeIn></div>
+  <div class="glass-bubble" style="bottom: 18%; left: 10%;" @bubbleFadeIn></div>
+  <div class="glass-bubble" style="top: 16%; right: 8%;" @bubbleFadeIn></div>
+  <div class="glass-bubble" style="top: 58%; right: 8%;" @bubbleFadeIn></div>
+  <div class="glass-bubble" style="bottom: 2%; right: 22%;" @bubbleFadeIn></div>
+
+
+  <div class="content-wrapper" @contentFade>
     <h1 class="title">StudyHub</h1>
     <h2 class="subtitle">Focus. Learn. Achieve.</h2>
     <p class="description">
@@ -22,7 +24,7 @@
   </div>
 
 
-  <div class="feature-intro">
+  <div class="feature-intro" @contentFade>
     <h2 class="feature-heading">
       <span class="gradient-text">Powerful Features</span><br />
       for Modern Learners
@@ -33,16 +35,15 @@
   </div>
 
 
-  <div class="glass-card-grid">
-
+  <div class="glass-card-grid" @fadeInStagger>
     <div class="glass-card">
       <h3><i class="fas fa-book-open card-icon focus-icon"></i> Focus Room</h3>
-      <p>Create immersive study environments with Pomodoro timers, ambient sounds, and motivational quotes.</p>
+      <p>Create immersive study environments with Pomodoro timer, ambient sounds, and motivational quotes.</p>
       <ul>
-        <li>Pomodoro, Countdown & Stopwatch modes</li>
-        <li>Ambient sounds and visuals</li>
+        <li>Pomodoro timer</li>
+        <li>Ambient sounds</li>
         <li>Motivational quotes rotation</li>
-        <li>Session tracking</li>
+        <li>Focus / Short / Long Break modes</li>
       </ul>
     </div>
 
@@ -50,21 +51,10 @@
       <h3><i class="fas fa-thumbtack card-icon task-icon"></i> Task Management</h3>
       <p>Organize your study workflow with smart task organization, priorities, and progress tracking.</p>
       <ul>
-        <li>CRUD operations for tasks</li>
+        <li>Create, edit and delete tasks</li>
         <li>Filter by subject & priority</li>
         <li>Subtask checklists</li>
         <li>Progress indicators</li>
-      </ul>
-    </div>
-
-    <div class="glass-card">
-      <h3><i class="fas fa-chart-line card-icon focus-icon"></i> Progress Analytics</h3>
-      <p>Visualize your productivity patterns and study habits with detailed charts and insights.</p>
-      <ul>
-        <li>Weekly study minutes tracking</li>
-        <li>Consecutive day streaks</li>
-        <li>Subject time distribution</li>
-        <li>Daily progress graphs</li>
       </ul>
     </div>
 
@@ -73,14 +63,14 @@
       <p>Discover and share study resources with a vibrant community of learners.</p>
       <ul>
         <li>Browse public study pages</li>
-        <li>Filter by subject & tags</li>
+        <li>Filter by subject & date</li>
         <li>Search functionality</li>
         <li>Community engagement</li>
       </ul>
     </div>
 
     <div class="glass-card">
-      <h3><i class="fas fa-file-alt card-icon pages-icon"></i> My Pages</h3>
+      <h3><i class="fas fa-file-alt card-icon my-pages-icon"></i> My Pages</h3>
       <p>Create and manage your own study resources with rich content and sharing options.</p>
       <ul>
         <li>Create custom study pages</li>
@@ -89,12 +79,11 @@
         <li>Resource embedding</li>
       </ul>
     </div>
-
   </div>
 
 
   @if (!isLoggedIn()) {
-  <div class="signup-callout">
+  <div class="signup-callout" @contentFade>
     <p class="signup-message">
       Want to personalize your study space and unlock more features?
     </p>
