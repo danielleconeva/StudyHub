@@ -34,7 +34,7 @@ export class MyStudyPages {
   searchQuery = signal('');
   selectedSubject = signal('All Subjects');
   selectedStatus = signal<'All Status' | 'Published' | 'Draft'>('All Status');
-  visibleCount = signal(6);
+  visibleCount = signal(3);
 
   constructor() {
     effect(() => {
@@ -84,7 +84,7 @@ export class MyStudyPages {
   }
 
   loadMore() {
-    this.visibleCount.update(count => count + 4);
+    this.visibleCount.update(count => count + 3);
   }
 
   extractTags(page: StudyPage): string[] {

@@ -146,25 +146,29 @@
 .load-more-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 3rem;
 }
 
 .load-more-button {
-  padding: 0.75rem 2rem;
-  background-color: white;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  padding: 0.875rem 2rem;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.737);
+  border: 1px solid rgba(209, 213, 219, 0.4);
+  border-radius: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  color: #4d5766;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .load-more-button:hover {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
+
 
 
 @media (max-width: 1024px) {

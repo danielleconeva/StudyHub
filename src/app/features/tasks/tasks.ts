@@ -24,7 +24,7 @@ export class Tasks {
 
   tasks = signal<Task[]>([]);
   users = signal<User[]>([]);
-  visibleCount = signal(5);
+  visibleCount = signal(3);
   isLoggedIn = this.authService.isLoggedIn;
 
   private _searchQuery = signal('');
@@ -83,7 +83,7 @@ export class Tasks {
   }
 
   loadMore() {
-    this.visibleCount.update(count => count + 5);
+    this.visibleCount.update(count => count + 3);
   }
 
   handleToggleSubtask(event: { taskId: string; subtaskIndex: number }) {
@@ -178,6 +178,6 @@ export class Tasks {
       .filter(task => this._selectedPriority() === 'All Priorities' || task.priority === this._selectedPriority())
       .filter(task => task.title.toLowerCase().includes(this._searchQuery().toLowerCase()));
 
-    return filtered.length > 4 && filtered.length > this.visibleCount();
+    return filtered.length > 3 && filtered.length > this.visibleCount();
   });
 }
