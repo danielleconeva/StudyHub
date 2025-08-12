@@ -1,24 +1,27 @@
 import { Component, inject, computed } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { AuthService } from '../../core/services/auth.service';
-import { User } from '@angular/fire/auth';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './header.html',
-  styleUrl: './header.css',
+  styleUrls: ['./header.css'],
 })
 export class Header {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private modal = inject(ModalService);
 
   isLoggedIn = this.authService.isLoggedIn;
   username = computed(() => this.authService.currentUser()?.username ?? '');
 
-  logout() {
-    const confirmed = confirm('Are you sure you want to log out?');
+  async logout() {
+    const confirmed = await this.modal.confirm('Are you sure you want to log out?', 'Confirm logout');
     if (!confirmed) return;
 
     this.authService.logout().subscribe(() => {

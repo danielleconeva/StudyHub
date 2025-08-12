@@ -5,28 +5,27 @@ import { Router, RouterModule } from '@angular/router';
 
 import { TaskService } from '../../core/services/task.service';
 import { AuthService, User } from '../../core/services/auth.service';
-import { ErrorService } from '../../core/services/error.service';
 import { Task } from '../../models/task.model';
 import { TaskItem } from './task-item/task-item';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, TaskItem],
   templateUrl: './tasks.html',
-  styleUrl: './tasks.css'
+  styleUrls: ['./tasks.css'],
 })
 export class Tasks {
   private taskService = inject(TaskService);
   private authService = inject(AuthService);
-  private errorService = inject(ErrorService);
   private router = inject(Router);
+  private modal = inject(ModalService);
 
   tasks = signal<Task[]>([]);
   users = signal<User[]>([]);
   visibleCount = signal(5);
   isLoggedIn = this.authService.isLoggedIn;
-  errorMessage = this.errorService.message;
 
   private _searchQuery = signal('');
   private _selectedSubject = signal('All Subjects');
@@ -43,19 +42,18 @@ export class Tasks {
 
       this.taskService.getUserTasks(user.id).subscribe({
         next: taskList => this.tasks.set(taskList),
-        error: () => this.errorService.show('Failed to load tasks')
+        error: () => this.modal.error('Failed to load tasks'),
       });
     });
 
-
     this.authService.getAllUsers().subscribe({
       next: userList => this.users.set(userList),
-      error: () => this.errorService.show('Failed to load users')
+      error: () => this.modal.error('Failed to load users'),
     });
 
-    effect(() => this.searchQueryValue = this._searchQuery());
-    effect(() => this.selectedSubjectValue = this._selectedSubject());
-    effect(() => this.selectedPriorityValue = this._selectedPriority());
+    effect(() => (this.searchQueryValue = this._searchQuery()));
+    effect(() => (this.selectedSubjectValue = this._selectedSubject()));
+    effect(() => (this.selectedPriorityValue = this._selectedPriority()));
   }
 
   updateSearchQuery(value: string) {
@@ -96,7 +94,7 @@ export class Tasks {
 
     const task = currentTasks[taskIndex];
     if (task.ownerId !== currentUserId) {
-      this.errorService.show('You are not authorized to update this task.');
+      this.modal.error('You are not authorized to update this task.');
       return;
     }
 
@@ -110,59 +108,57 @@ export class Tasks {
           ...task,
           subtasks: updatedSubtasks,
           completed,
-          progress
+          progress,
         };
         this.tasks.set(updatedTasks);
       });
   }
 
-
-  onDeleteTask(taskId: string) {
+  async onDeleteTask(taskId: string) {
     const currentUserId = this.authService.getCurrentUserId();
     const task = this.tasks().find(t => t.id === taskId);
 
     if (!task || task.ownerId !== currentUserId) {
-      this.errorService.show('You are not authorized to delete this task.');
+      this.modal.error('You are not authorized to delete this task.');
       return;
     }
 
-    if (confirm('Are you sure you want to delete this task?')) {
-      this.taskService.deleteTask(taskId)
-        .then(() => {
-          this.tasks.update(tasks => tasks.filter(t => t.id !== taskId));
-        })
-        .catch(() => {
-          this.errorService.show('Failed to delete task');
-        });
-    }
-  }
+    const ok = await this.modal.confirm('Are you sure you want to delete this task?', 'Confirm deletion');
+    if (!ok) return;
 
+    this.taskService
+      .deleteTask(taskId)
+      .then(() => {
+        this.tasks.update(tasks => tasks.filter(t => t.id !== taskId));
+      })
+      .catch(() => {
+        this.modal.error('Failed to delete task');
+      });
+  }
 
   onEditTask(taskId: string) {
     const currentUserId = this.authService.getCurrentUserId();
     const task = this.tasks().find(t => t.id === taskId);
 
     if (!task || task.ownerId !== currentUserId) {
-      this.errorService.show('You are not authorized to edit this task.');
+      this.modal.error('You are not authorized to edit this task.');
       return;
     }
 
     this.router.navigate([`/tasks/edit/${taskId}`]);
   }
 
-
   onAddSubtask(event: { taskId: string; text: string }) {
     const currentUserId = this.authService.getCurrentUserId();
     const task = this.tasks().find(t => t.id === event.taskId);
 
     if (!task || task.ownerId !== currentUserId) {
-      this.errorService.show('You are not authorized to modify this task.');
+      this.modal.error('You are not authorized to modify this task.');
       return;
     }
 
     this.taskService.addSubtask(event.taskId, event.text);
   }
-
 
   onCreateNewTask() {
     this.router.navigate(['/tasks/new']);
@@ -170,23 +166,17 @@ export class Tasks {
 
   filteredTasks = computed(() => {
     return this.tasks()
-      .filter(task =>
-        this._selectedSubject() === 'All Subjects' || task.subject === this._selectedSubject())
-      .filter(task =>
-        this._selectedPriority() === 'All Priorities' || task.priority === this._selectedPriority())
-      .filter(task =>
-        task.title.toLowerCase().includes(this._searchQuery().toLowerCase()))
+      .filter(task => this._selectedSubject() === 'All Subjects' || task.subject === this._selectedSubject())
+      .filter(task => this._selectedPriority() === 'All Priorities' || task.priority === this._selectedPriority())
+      .filter(task => task.title.toLowerCase().includes(this._searchQuery().toLowerCase()))
       .slice(0, this.visibleCount());
   });
 
   showLoadMore = computed(() => {
     const filtered = this.tasks()
-      .filter(task =>
-        this._selectedSubject() === 'All Subjects' || task.subject === this._selectedSubject())
-      .filter(task =>
-        this._selectedPriority() === 'All Priorities' || task.priority === this._selectedPriority())
-      .filter(task =>
-        task.title.toLowerCase().includes(this._searchQuery().toLowerCase()));
+      .filter(task => this._selectedSubject() === 'All Subjects' || task.subject === this._selectedSubject())
+      .filter(task => this._selectedPriority() === 'All Priorities' || task.priority === this._selectedPriority())
+      .filter(task => task.title.toLowerCase().includes(this._searchQuery().toLowerCase()));
 
     return filtered.length > 4 && filtered.length > this.visibleCount();
   });

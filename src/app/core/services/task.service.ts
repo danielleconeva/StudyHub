@@ -1,4 +1,4 @@
-import { Injectable, inject, EnvironmentInjector } from '@angular/core';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import {
     Firestore,
     collection,
@@ -9,23 +9,21 @@ import {
     getDoc,
     query,
     where,
-    setDoc
+    setDoc,
 } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 import { Task, Subtask } from '../../models/task.model';
 import { AuthService } from './auth.service';
-import { ErrorService } from './error.service';
-import { Observable } from 'rxjs';
-import { runInInjectionContext } from '@angular/core';
+import { ModalService } from '../services/modal.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TaskService {
     private firestore = inject(Firestore);
     private authService = inject(AuthService);
-    private errorService = inject(ErrorService);
+    private modal = inject(ModalService);
     private envInjector = inject(EnvironmentInjector);
+
     private tasksRef = collection(this.firestore, 'tasks');
 
     getUserTasks(userId: string): Observable<Task[]> {
@@ -39,7 +37,8 @@ export class TaskService {
         return runInInjectionContext(this.envInjector, () => {
             const taskDoc = doc(this.firestore, `tasks/${task.id}`);
             return setDoc(taskDoc, task).catch(error => {
-                this.errorService.show(error.message || 'Failed to create task');
+                console.error('createTask error:', error);
+                this.modal.error(error?.message || 'Failed to create task');
                 throw error;
             });
         });
@@ -49,7 +48,8 @@ export class TaskService {
         return runInInjectionContext(this.envInjector, () => {
             const taskDocRef = doc(this.firestore, `tasks/${taskId}`);
             return updateDoc(taskDocRef, data).catch(error => {
-                this.errorService.show(error.message || 'Failed to update task');
+                console.error('updateTask error:', error);
+                this.modal.error(error?.message || 'Failed to update task');
                 throw error;
             });
         });
@@ -59,7 +59,11 @@ export class TaskService {
         return this.updateTask(taskId, { title: newTitle });
     }
 
-    updateSubtaskStatus(taskId: string, subtaskIndex: number, done: boolean): Promise<{
+    updateSubtaskStatus(
+        taskId: string,
+        subtaskIndex: number,
+        done: boolean
+    ): Promise<{
         updatedSubtasks: Subtask[];
         progress: number;
         completed: boolean;
@@ -102,7 +106,7 @@ export class TaskService {
 
             await updateDoc(taskDocRef, {
                 subtasks: task.subtasks,
-                progress
+                progress,
             });
         });
     }
@@ -111,7 +115,8 @@ export class TaskService {
         return runInInjectionContext(this.envInjector, () => {
             const taskDocRef = doc(this.firestore, `tasks/${taskId}`);
             return deleteDoc(taskDocRef).catch(err => {
-                this.errorService.show(err.message || 'Failed to delete task');
+                console.error('deleteTask error:', err);
+                this.modal.error(err?.message || 'Failed to delete task');
                 throw err;
             });
         });
@@ -127,10 +132,7 @@ export class TaskService {
             const taskDocRef = doc(this.firestore, `tasks/${taskId}`);
             const snapshot = await getDoc(taskDocRef);
             if (!snapshot.exists()) return null;
-
             return snapshot.data() as Task;
         });
     }
-
-
 }

@@ -10,18 +10,20 @@ import { Comment } from '../../models/comment.model';
 import { Like } from '../../models/like.model';
 import { Timestamp } from '@angular/fire/firestore';
 import { StudyPageItem } from './study-page-item/study-page-item';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-explore-pages',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, StudyPageItem],
   templateUrl: './explore-pages.html',
-  styleUrl: './explore-pages.css',
+  styleUrls: ['./explore-pages.css'],
 })
 export class ExplorePages {
   private studyPageService = inject(StudyPagesService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private modal = inject(ModalService);
 
   studyPages = this.studyPageService.getStudyPages();
   comments = this.studyPageService.getComments();
@@ -44,13 +46,10 @@ export class ExplorePages {
     effect(() => {
       const allLikes = this.studyPageService.getLikes()();
       const userId = this.authService.getCurrentUserId();
-
       if (!allLikes || !userId) return;
 
       const likedSet = new Set<string>(
-        allLikes
-          .filter((like: Like) => like.userId === userId)
-          .map((like: Like) => like.pageId)
+        allLikes.filter((like: Like) => like.userId === userId).map((like: Like) => like.pageId)
       );
       this.likedPages.set(likedSet);
     });
@@ -63,22 +62,17 @@ export class ExplorePages {
 
   getSubjects(): string[] {
     const subjects = new Set(
-      (this.studyPages() ?? [])
-        .filter((p) => p?.subject)
-        .map((p) => p.subject)
+      (this.studyPages() ?? []).filter((p) => p?.subject).map((p) => p.subject)
     );
     return ['All Subjects', ...Array.from(subjects)];
   }
 
   getCommentCount(pageId: string): number {
-    return this.comments()?.filter((c) => c.pageId === pageId).length ?? 0;
+    return this.comments()?.filter((c: Comment) => c.pageId === pageId).length ?? 0;
   }
 
   formatDate(timestamp: string | Timestamp): string {
-    const date =
-      typeof timestamp === 'string'
-        ? new Date(timestamp)
-        : timestamp?.toDate?.() ?? new Date();
+    const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp?.toDate?.() ?? new Date();
     return date.toLocaleDateString('en-GB');
   }
 
@@ -92,24 +86,13 @@ export class ExplorePages {
 
     return all
       .filter((p) => p?.isPublic === true)
+      .filter((p) => this.selectedSubject() === 'All Subjects' || p.subject === this.selectedSubject())
       .filter(
         (p) =>
-          this.selectedSubject() === 'All Subjects' ||
-          p.subject === this.selectedSubject()
+          (p.title?.toLowerCase() ?? '').includes(this.searchQuery().toLowerCase()) ||
+          (p.notes?.toLowerCase() ?? '').includes(this.searchQuery().toLowerCase())
       )
-      .filter(
-        (p) =>
-          (p.title?.toLowerCase() ?? '').includes(
-            this.searchQuery().toLowerCase()
-          ) ||
-          (p.notes?.toLowerCase() ?? '').includes(
-            this.searchQuery().toLowerCase()
-          )
-      )
-      .map((p) => ({
-        ...p,
-        notes: typeof p.notes === 'string' ? p.notes : '',
-      }));
+      .map((p) => ({ ...p, notes: typeof p.notes === 'string' ? p.notes : '' }));
   });
 
   filteredPages = computed(() => {
@@ -119,25 +102,16 @@ export class ExplorePages {
 
   private sortPages(pages: StudyPage[]) {
     const getMillis = (value: string | Timestamp): number => {
-      if (typeof value === 'string') {
-        return Date.parse(value);
-      } else if (value?.toMillis) {
-        return value.toMillis();
-      }
+      if (typeof value === 'string') return Date.parse(value);
+      if ((value as Timestamp)?.toMillis) return (value as Timestamp).toMillis();
       return 0;
     };
 
     switch (this.sortOption()) {
       case 'Most Popular':
-        return [...pages].sort(
-          (a, b) => (b.likesCount || 0) - (a.likesCount || 0)
-        );
+        return [...pages].sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0));
       case 'Newest':
-        return [...pages].sort((a, b) => {
-          const aDate = getMillis(a.createdAt);
-          const bDate = getMillis(b.createdAt);
-          return bDate - aDate;
-        });
+        return [...pages].sort((a, b) => getMillis(b.createdAt) - getMillis(a.createdAt));
       default:
         return pages;
     }
@@ -151,7 +125,6 @@ export class ExplorePages {
       .toggleLike(page.id, userId)
       .then((action) => {
         const updatedSet = new Set(this.likedPages());
-
         if (action === 'liked') {
           updatedSet.add(page.id);
           page.likesCount = (page.likesCount || 0) + 1;
@@ -159,11 +132,11 @@ export class ExplorePages {
           updatedSet.delete(page.id);
           page.likesCount = Math.max((page.likesCount || 1) - 1, 0);
         }
-
         this.likedPages.set(updatedSet);
       })
       .catch((err) => {
         console.error('Like toggle failed:', err);
+        this.modal.error('Like toggle failed');
       });
   }
 
@@ -171,25 +144,28 @@ export class ExplorePages {
     this.router.navigate(['/my-study-pages/edit', page.id]);
   }
 
-  handleDelete(page: StudyPage) {
+  async handleDelete(page: StudyPage) {
     const userId = this.currentUserId();
     if (page.ownerId !== userId) {
-      alert("You are not allowed to delete this page.");
+      this.modal.error('You are not allowed to delete this page.');
       return;
     }
 
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete the study page "${page.title}"? This action cannot be undone.`
+    const ok = await this.modal.confirm(
+      'Are you sure you want to delete this study page?',
+      'Confirm deletion'
     );
+    if (!ok) return;
 
-    if (!confirmDelete) return;
-
-    this.studyPageService.deleteStudyPage(page.id)
+    this.studyPageService
+      .deleteStudyPage(page.id)
       .then(() => {
-        console.log('Deleted:', page.id);
+        // optional success toast:
+        // this.modal.success('Page deleted successfully.');
       })
       .catch((err) => {
         console.error('Delete failed:', err);
+        this.modal.error('Delete failed');
       });
   }
 }

@@ -1,0 +1,22 @@
+<div class="toast" *ngIf="modal.state()?.autoClose" [ngClass]="modal.state()?.type">
+    <div class="toast-title">{{ modal.state()?.title }}</div>
+    <div class="toast-msg">{{ modal.state()?.message }}</div>
+</div>
+
+<div class="overlay" *ngIf="modal.state() && !modal.state()?.autoClose" (click)="onBackdropClick()">
+    <div class="card" [ngClass]="modal.state()?.type" (click)="$event.stopPropagation()">
+        <h3 class="title">{{ modal.state()?.title }}</h3>
+        <p class="message">{{ modal.state()?.message }}</p>
+
+        <div class="actions">
+            <button class="btn primary" (click)="modal.close(true)">
+                {{ modal.state()?.confirmText || 'OK' }}
+            </button>
+
+            <button *ngIf="modal.state()?.type === 'confirm' || modal.state()?.cancelText" class="btn ghost"
+                (click)="modal.close(false)">
+                {{ modal.state()?.cancelText || 'Cancel' }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -16,12 +16,6 @@
         </p>
       </div>
 
-      @if (errorService.message()) {
-      <p class="firebase-error-msg error">{{ errorService.message() }}</p>
-      }
-
-      <!-- success message block removed -->
-
       <div class="form-group">
         <label for="username">Username</label>
         <input id="username" type="text" placeholder="Enter your username" formControlName="username"

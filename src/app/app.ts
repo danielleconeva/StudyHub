@@ -1,15 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+
 import { Header } from './shared/header/header';
 import { Footer } from './shared/footer/footer';
 import { LoaderService } from './core/services/loader.service';
-import { CommonModule } from '@angular/common';
+import { Modal } from './shared/modal/modal';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer, CommonModule],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, Header, Footer, Modal],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
 })
 export class App {
   constructor(public loader: LoaderService) { }

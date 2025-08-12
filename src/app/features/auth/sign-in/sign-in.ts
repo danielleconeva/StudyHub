@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
 import { NgClass } from '@angular/common';
+
+import { AuthService } from '../../../core/services/auth.service';
 import { LoaderService } from '../../../core/services/loader.service';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink, NgClass],
   templateUrl: './sign-in.html',
-  styleUrl: './sign-in.css',
+  styleUrls: ['./sign-in.css'],
 })
 export class SignIn {
   signInForm: FormGroup;
@@ -22,8 +23,8 @@ export class SignIn {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    public errorService: ErrorService,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private modal: ModalService
   ) {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -45,25 +46,25 @@ export class SignIn {
       return;
     }
 
-    const { email, password } = this.signInForm.value;
+    const { email, password } = this.signInForm.value as { email: string; password: string };
 
     this.isSubmitting = true;
     this.loader.show();
-    this.errorService.clear();
 
-    this.authService.loginUser(email!, password!).subscribe({
+    this.authService.loginUser(email, password).subscribe({
       next: () => {
-        this.router.navigateByUrl('/');
         this.isSubmitting = false;
         this.loader.hide();
+        this.modal.success('Signed in successfully!');
+        this.router.navigateByUrl('/');
       },
       error: (err) => {
         const msg = this.mapFirebaseError(err);
-        this.errorService.show(msg);
-        this.signInForm.reset();
         this.isSubmitting = false;
         this.loader.hide();
-      }
+        this.modal.error(msg);
+        this.signInForm.reset();
+      },
     });
   }
 
@@ -71,9 +72,9 @@ export class SignIn {
     const code = error?.code;
     switch (code) {
       case 'auth/invalid-credential':
-        return "Incorrect email or password. Please try again.";
+        return 'Incorrect email or password. Please try again.';
       default:
-        return "Login failed. Please try again.";
+        return 'Login failed. Please try again.';
     }
   }
 }

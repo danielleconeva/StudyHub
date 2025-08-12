@@ -1,5 +1,4 @@
 <div class="form-wrapper">
-
     <div class="glass-bubble" style="top: 12%; left: 10%;"></div>
     <div class="glass-bubble" style="top: 25%; right: 12%;"></div>
     <div class="glass-bubble" style="bottom: 20%; left: 16%;"></div>
@@ -7,8 +6,6 @@
 
     <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
         <fieldset>
-
-
             <div class="form-header">
                 <h1>StudyHub</h1>
                 <p>Welcome back</p>
@@ -17,11 +14,7 @@
                 </p>
             </div>
 
-
-            @if (errorService.message()) {
-            <p class="firebase-error-msg error">{{ errorService.message() }}</p>
-            }
-
+            <!-- removed inline errorService block; errors now show via global toast modal -->
 
             <div class="form-group">
                 <label for="email">Email</label>
@@ -30,16 +23,11 @@
                     [class.input-valid]="email?.valid && (email?.touched || email?.dirty)" />
                 @if (email?.invalid && (email?.touched || email?.dirty)) {
                 <p class="error-msg">
-                    @if (email?.errors?.['required']) {
-                    Email is required.
-                    }
-                    @if (email?.errors?.['email']) {
-                    Invalid email format.
-                    }
+                    @if (email?.errors?.['required']) { Email is required. }
+                    @if (email?.errors?.['email']) { Invalid email format. }
                 </p>
                 }
             </div>
-
 
             <div class="form-group">
                 <label for="password">Password</label>
@@ -54,19 +42,13 @@
                     </span>
                 </div>
 
-
                 @if (password?.invalid && (password?.touched || password?.dirty)) {
                 <p class="error-msg">
-                    @if (password?.errors?.['required']) {
-                    Password is required.
-                    }
-                    @if (password?.errors?.['minlength']) {
-                    At least 6 characters required.
-                    }
+                    @if (password?.errors?.['required']) { Password is required. }
+                    @if (password?.errors?.['minlength']) { At least 6 characters required. }
                 </p>
                 }
             </div>
-
 
             <div class="form-actions">
                 <button type="submit" [disabled]="signInForm.invalid || isSubmitting">
@@ -74,17 +56,10 @@
                 </button>
             </div>
 
-
             <div class="form-footer">
-                <p>
-                    Don’t have an account?
-                    <a routerLink="/sign-up">Sign up</a>
-                </p>
-                <p>
-                    <a routerLink="/">← Back to home</a>
-                </p>
+                <p>Don’t have an account? <a routerLink="/sign-up">Sign up</a></p>
+                <p><a routerLink="/">← Back to home</a></p>
             </div>
-
         </fieldset>
     </form>
 </div>

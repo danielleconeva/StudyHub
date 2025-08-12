@@ -7,13 +7,14 @@ import { StudyPagesService } from '../../../core/services/study-pages.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { StudyPage, SyllabusItem } from '../../../models/study-page.model';
 import { LoaderService } from '../../../core/services/loader.service';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-edit-study-page',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './edit-study-page.html',
-  styleUrl: './edit-study-page.css'
+  styleUrls: ['./edit-study-page.css'],
 })
 export class EditStudyPage implements OnInit {
   private studyPagesService = inject(StudyPagesService);
@@ -21,6 +22,7 @@ export class EditStudyPage implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private loader = inject(LoaderService);
+  private modal = inject(ModalService);
 
   pageId = signal<string | null>(null);
 
@@ -37,7 +39,7 @@ export class EditStudyPage implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      alert('Invalid page ID');
+      this.modal.error('Invalid page ID');
       this.router.navigate(['/my-study-pages']);
       return;
     }
@@ -46,15 +48,14 @@ export class EditStudyPage implements OnInit {
 
     this.studyPagesService.getPageById(id).then((page) => {
       if (!page) {
-        alert('Page not found');
+        this.modal.error('Page not found');
         this.router.navigate(['/my-study-pages']);
         return;
       }
 
       const currentUserId = this.authService.getCurrentUserId();
-
       if (!currentUserId || page.ownerId !== currentUserId) {
-        alert('You are not authorized to edit this page.');
+        this.modal.error('You are not authorized to edit this page.');
         this.router.navigate(['/not-found']);
         return;
       }
@@ -65,6 +66,9 @@ export class EditStudyPage implements OnInit {
       this.notes.set(page.notes);
       this.syllabus.set(page.syllabus || []);
       this.resources.set((page.resources || []).map(r => r.toString()));
+    }).catch(() => {
+      this.modal.error('Page not found');
+      this.router.navigate(['/my-study-pages']);
     });
   }
 
@@ -100,7 +104,7 @@ export class EditStudyPage implements OnInit {
     const id = this.pageId();
 
     if (!title || !subject || !notes || !id) {
-      alert('Please fill in all required fields.');
+      this.modal.error('Please fill in all required fields.');
       return;
     }
 
@@ -117,12 +121,16 @@ export class EditStudyPage implements OnInit {
 
     try {
       await this.studyPagesService.updateStudyPage(id, updatedPage);
+
+      this.loader.hide();
+
+      this.modal.success('Study page updated successfully!');
       this.router.navigate(['/my-study-pages']);
     } catch (err) {
       console.error('Update error:', err);
-      alert('Something went wrong while updating the study page.');
-    } finally {
+
       this.loader.hide();
+      this.modal.error('Something went wrong while updating the study page.');
     }
   }
 

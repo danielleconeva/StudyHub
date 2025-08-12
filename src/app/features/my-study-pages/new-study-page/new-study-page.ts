@@ -7,13 +7,14 @@ import { StudyPagesService } from '../../../core/services/study-pages.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { StudyPage, SyllabusItem } from '../../../models/study-page.model';
 import { LoaderService } from '../../../core/services/loader.service';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-new-study-page',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './new-study-page.html',
-  styleUrl: './new-study-page.css'
+  styleUrls: ['./new-study-page.css'],
 })
 export class NewStudyPage {
   title = signal('');
@@ -30,7 +31,8 @@ export class NewStudyPage {
     private router: Router,
     private studyPagesService: StudyPagesService,
     private authService: AuthService,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private modal: ModalService
   ) { }
 
   addSyllabusItem() {
@@ -48,9 +50,7 @@ export class NewStudyPage {
 
   toggleSyllabusItem(index: number) {
     this.syllabus.update(list =>
-      list.map((item, i) =>
-        i === index ? { ...item, done: !item.done } : item
-      )
+      list.map((item, i) => (i === index ? { ...item, done: !item.done } : item))
     );
   }
 
@@ -83,14 +83,13 @@ export class NewStudyPage {
     const notes = this.notes().trim();
 
     if (!title || !subject || !notes) {
-      alert('Please fill in all required fields: Title, Subject, and Study Notes.');
+      this.modal.error('Please fill in all required fields: Title, Subject, and Study Notes.');
       return;
     }
 
     const ownerId = this.authService.getCurrentUserId();
-
     if (!ownerId) {
-      alert('You must be logged in to create a study page.');
+      this.modal.error('You must be logged in to create a study page.');
       return;
     }
 
@@ -103,19 +102,21 @@ export class NewStudyPage {
       resources: this.resources(),
       notes,
       likesCount: 0,
-      ownerId
+      ownerId,
     };
 
     this.loader.show();
 
     try {
       await this.studyPagesService.addPage(newPage);
+
+      this.loader.hide();
+      this.modal.success('Study page created successfully!');
       this.router.navigate(['/my-study-pages']);
     } catch (err) {
       console.error('Error creating page:', err);
-      alert('Something went wrong while creating the study page.');
-    } finally {
       this.loader.hide();
+      this.modal.error('Something went wrong while creating the study page.');
     }
   }
 

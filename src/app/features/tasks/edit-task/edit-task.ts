@@ -5,24 +5,23 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 
 import { TaskService } from '../../../core/services/task.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
-
 import { Task, Subtask } from '../../../models/task.model';
 import { Timestamp } from '@angular/fire/firestore';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-edit-task',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './edit-task.html',
-  styleUrl: './edit-task.css'
+  styleUrls: ['./edit-task.css'],
 })
 export class EditTask implements OnInit {
   private taskService = inject(TaskService);
   private authService = inject(AuthService);
-  private errorService = inject(ErrorService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private modal = inject(ModalService);
 
   taskId = '';
   titleValue = '';
@@ -41,7 +40,8 @@ export class EditTask implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      this.errorService.show?.('Invalid task ID.');
+      // same message, via modal
+      this.modal.error('Invalid task ID.');
       this.router.navigate(['/tasks']);
       return;
     }
@@ -50,7 +50,7 @@ export class EditTask implements OnInit {
 
     const currentUserId = this.authService.getCurrentUserId();
     if (!currentUserId) {
-      this.errorService.show?.('You must be logged in to edit a task.');
+      this.modal.error('You must be logged in to edit a task.');
       this.router.navigate(['/tasks']);
       return;
     }
@@ -59,13 +59,13 @@ export class EditTask implements OnInit {
     this.taskService.getTaskById(id)
       .then((task: Task | null) => {
         if (!task) {
-          this.errorService.show?.('Task not found.');
+          this.modal.error('Task not found.');
           this.router.navigate(['/tasks']);
           return;
         }
 
         if (task.ownerId !== currentUserId) {
-          this.errorService.show?.('You are not authorized to edit this task.');
+          this.modal.error('You are not authorized to edit this task.');
           this.router.navigate(['/not-found']);
           return;
         }
@@ -77,7 +77,7 @@ export class EditTask implements OnInit {
         this.subtasks = [...task.subtasks];
       })
       .catch(() => {
-        this.errorService.show?.('Failed to load task.');
+        this.modal.error('Failed to load task.');
         this.router.navigate(['/tasks']);
       })
       .finally(() => {
@@ -99,12 +99,12 @@ export class EditTask implements OnInit {
   updateTask() {
     const user = this.authService.currentUser?.();
     if (!user) {
-      this.errorService.show?.('You must be logged in to update a task.');
+      this.modal.error('You must be logged in to update a task.');
       return;
     }
 
     if (!this.titleValue.trim() || !this.subjectValue.trim()) {
-      this.errorService.show?.('Please fill in all required fields.');
+      this.modal.error('Please fill in all required fields.');
       return;
     }
 
@@ -128,9 +128,10 @@ export class EditTask implements OnInit {
 
     this.taskService.updateTask(this.taskId, updatedTask)
       .then(() => {
+        this.modal.success('Task updated successfully!');
         this.router.navigate(['/tasks']);
       })
-      .catch(() => this.errorService.show?.('Failed to update task.'))
+      .catch(() => this.modal.error('Failed to update task.'))
       .finally(() => {
         this.loading.set(false);
       });

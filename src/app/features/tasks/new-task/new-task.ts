@@ -5,24 +5,24 @@ import { Router, RouterModule } from '@angular/router';
 
 import { TaskService } from '../../../core/services/task.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
 import { Task, Subtask } from '../../../models/task.model';
 import { Timestamp } from '@angular/fire/firestore';
 import { LoaderService } from '../../../core/services/loader.service';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-new-task',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './new-task.html',
-  styleUrl: './new-task.css'
+  styleUrls: ['./new-task.css'],
 })
 export class NewTask {
   private taskService = inject(TaskService);
   private authService = inject(AuthService);
-  private errorService = inject(ErrorService);
   private router = inject(Router);
   private loader = inject(LoaderService);
+  private modal = inject(ModalService);
 
   titleValue = '';
   subjectValue = '';
@@ -58,12 +58,12 @@ export class NewTask {
   async createTask() {
     const user = this.authService.currentUser?.();
     if (!user) {
-      this.errorService.show?.('You must be logged in to create a task.');
+      this.modal.error('You must be logged in to create a task.');
       return;
     }
 
     if (!this.titleValue.trim() || !this.subjectValue.trim()) {
-      this.errorService.show?.('Please fill in all required fields.');
+      this.modal.error('Please fill in all required fields.');
       return;
     }
 
@@ -82,18 +82,21 @@ export class NewTask {
       subtasks: [...this.subtasks],
       progress,
       completed,
-      ownerId: user.id
+      ownerId: user.id,
     };
 
     this.loader.show();
 
     try {
       await this.taskService.createTask(task);
-      this.router.navigate(['/tasks']);
-    } catch {
-      this.errorService.show?.('Failed to create task.');
-    } finally {
+
+      this.modal.success('Task created successfully!');
+
+      await this.router.navigate(['/tasks']);
       this.loader.hide();
+    } catch {
+      this.loader.hide();
+      this.modal.error('Failed to create task.');
     }
   }
 }

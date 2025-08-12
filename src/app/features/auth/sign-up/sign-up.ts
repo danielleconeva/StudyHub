@@ -3,26 +3,26 @@ import {
   FormBuilder,
   Validators,
   FormGroup,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { NgClass, CommonModule } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
 import {
   usernameTakenValidator,
-  emailTakenValidator
+  emailTakenValidator,
 } from '../../../shared/validators/unique-validators';
+import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, NgClass],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgClass],
   templateUrl: './sign-up.html',
-  styleUrl: './sign-up.css',
+  styleUrls: ['./sign-up.css'],
 })
 export class SignUp {
   signupForm: FormGroup;
@@ -33,20 +33,20 @@ export class SignUp {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    public errorService: ErrorService,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private modal: ModalService
   ) {
     this.signupForm = this.fb.group(
       {
         username: [
           '',
           [Validators.required],
-          [usernameTakenValidator(this.authService)]
+          [usernameTakenValidator(this.authService)],
         ],
         email: [
           '',
           [Validators.required, Validators.email],
-          [emailTakenValidator(this.authService)]
+          [emailTakenValidator(this.authService)],
         ],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', [Validators.required]],
@@ -68,22 +68,31 @@ export class SignUp {
       return;
     }
 
-    const { username, email, password } = this.signupForm.value;
+    const { username, email, password } = this.signupForm.value as {
+      username: string; email: string; password: string;
+    };
 
-    this.isSubmitting = true;       // keep button state
-    this.loader.show();             // show global overlay
-    this.errorService.clear();
+    this.isSubmitting = true;   // keep button state
+    this.loader.show();         // show global overlay
 
     try {
-      await this.authService.registerUser(username!, email!, password!);
+      await this.authService.registerUser(username, email, password);
+
+      // Hide loader before showing toast so it’s never covered
+      this.loader.hide();
+      this.modal.success('Account created successfully!');
+
       this.router.navigateByUrl('/');
     } catch (err: any) {
       const msg = this.mapFirebaseError(err);
-      this.errorService.show(msg);
+
+      // Hide loader before showing error toast
+      this.loader.hide();
+      this.modal.error(msg);
+
       this.signupForm.reset();
     } finally {
       this.isSubmitting = false;
-      this.loader.hide();           // hide overlay
     }
   }
 
