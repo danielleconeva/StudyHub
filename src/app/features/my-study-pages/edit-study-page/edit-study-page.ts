@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StudyPagesService } from '../../../core/services/study-pages.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { StudyPage, SyllabusItem } from '../../../models/study-page.model';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
   selector: 'app-edit-study-page',
@@ -19,6 +20,7 @@ export class EditStudyPage implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private loader = inject(LoaderService);
 
   pageId = signal<string | null>(null);
 
@@ -57,7 +59,6 @@ export class EditStudyPage implements OnInit {
         return;
       }
 
-
       this.title.set(page.title);
       this.subject.set(page.subject);
       this.visibility.set(page.isPublic ? 'public' : 'private');
@@ -92,12 +93,12 @@ export class EditStudyPage implements OnInit {
     this.resources.update(r => r.filter((_, i) => i !== index));
   }
 
-  updateStudyPage() {
+  async updateStudyPage() {
     const title = this.title().trim();
     const subject = this.subject().trim();
     const notes = this.notes().trim();
-
     const id = this.pageId();
+
     if (!title || !subject || !notes || !id) {
       alert('Please fill in all required fields.');
       return;
@@ -112,14 +113,17 @@ export class EditStudyPage implements OnInit {
       resources: this.resources(),
     };
 
-    this.studyPagesService.updateStudyPage(id, updatedPage).then(() => {
-      this.successMessage.set('Study page updated successfully!');
-      setTimeout(() => this.successMessage.set(null), 3000);
-      setTimeout(() => this.router.navigate(['/my-study-pages']), 3100);
-    }).catch(err => {
+    this.loader.show();
+
+    try {
+      await this.studyPagesService.updateStudyPage(id, updatedPage);
+      this.router.navigate(['/my-study-pages']);
+    } catch (err) {
       console.error('Update error:', err);
       alert('Something went wrong while updating the study page.');
-    });
+    } finally {
+      this.loader.hide();
+    }
   }
 
   goBackToMyPages() {

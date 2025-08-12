@@ -10,6 +10,7 @@ import { NgClass } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { ErrorService } from '../../../core/services/error.service';
+import { LoaderService } from '../../../core/services/loader.service';
 import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
 import {
   usernameTakenValidator,
@@ -26,14 +27,14 @@ import {
 export class SignUp {
   signupForm: FormGroup;
   isSubmitting = false;
-  successMessage: string | null = null;
   showPassword = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    public errorService: ErrorService
+    public errorService: ErrorService,
+    private loader: LoaderService
   ) {
     this.signupForm = this.fb.group(
       {
@@ -54,24 +55,12 @@ export class SignUp {
         validators: passwordMatchValidator('password', 'confirmPassword'),
       }
     );
-
   }
 
-  get username() {
-    return this.signupForm.get('username');
-  }
-
-  get email() {
-    return this.signupForm.get('email');
-  }
-
-  get password() {
-    return this.signupForm.get('password');
-  }
-
-  get confirmPassword() {
-    return this.signupForm.get('confirmPassword');
-  }
+  get username() { return this.signupForm.get('username'); }
+  get email() { return this.signupForm.get('email'); }
+  get password() { return this.signupForm.get('password'); }
+  get confirmPassword() { return this.signupForm.get('confirmPassword'); }
 
   async onSubmit() {
     if (this.signupForm.invalid) {
@@ -81,32 +70,25 @@ export class SignUp {
 
     const { username, email, password } = this.signupForm.value;
 
-    this.isSubmitting = true;
+    this.isSubmitting = true;       // keep button state
+    this.loader.show();             // show global overlay
     this.errorService.clear();
-    this.successMessage = null;
 
     try {
       await this.authService.registerUser(username!, email!, password!);
-
-      this.successMessage = 'Account successfully created!';
-      this.signupForm.reset();
-
-      setTimeout(() => {
-        this.successMessage = null;
-        this.router.navigateByUrl('/');
-      }, 2000);
+      this.router.navigateByUrl('/');
     } catch (err: any) {
       const msg = this.mapFirebaseError(err);
       this.errorService.show(msg);
       this.signupForm.reset();
     } finally {
       this.isSubmitting = false;
+      this.loader.hide();           // hide overlay
     }
   }
 
   private mapFirebaseError(error: any): string {
     const code = error?.code;
-
     switch (code) {
       case 'auth/email-already-in-use':
         return 'This email is already in use.';

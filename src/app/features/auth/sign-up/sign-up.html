@@ -11,18 +11,16 @@
       <div class="form-header">
         <h1>StudyHub</h1>
         <p>Create your account</p>
-        <p class="adittional-text" style="font-size: 0.9rem; color: #7e8194; font-weight: 500;">Join thousands of
-          students achieving their goals.</p>
+        <p class="adittional-text" style="font-size: 0.9rem; color: #7e8194; font-weight: 500;">
+          Join thousands of students achieving their goals.
+        </p>
       </div>
 
       @if (errorService.message()) {
       <p class="firebase-error-msg error">{{ errorService.message() }}</p>
       }
 
-      @if (successMessage) {
-      <p class="firebase-success-msg success">{{ successMessage }}</p>
-      }
-
+      <!-- success message block removed -->
 
       <div class="form-group">
         <label for="username">Username</label>
@@ -37,7 +35,6 @@
         }
       </div>
 
-
       <div class="form-group">
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="Enter your email" formControlName="email"
@@ -51,7 +48,6 @@
         </p>
         }
       </div>
-
 
       <div class="form-group">
         <label for="password">Password</label>
@@ -71,7 +67,6 @@
         }
       </div>
 
-
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
         <div class="password-wrapper">
@@ -88,13 +83,11 @@
         }
       </div>
 
-
       <div class="form-actions">
         <button type="submit" [disabled]="signupForm.invalid || signupForm.pending || isSubmitting">
           {{ isSubmitting ? 'Registering...' : 'Create Account' }}
         </button>
       </div>
-
 
       <div class="form-footer">
         <p>

@@ -1,26 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { from, map, Observable, tap } from 'rxjs';
-import {
-  Auth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  signInWithEmailAndPassword,
-  signOut,
-  UserCredential,
-  onAuthStateChanged,
-} from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut, UserCredential, onAuthStateChanged } from '@angular/fire/auth';
 
-import {
-  Firestore,
-  doc,
-  setDoc,
-  collection,
-  collectionData,
-  getDoc,
-  getDocs,
-  DocumentData,
-} from '@angular/fire/firestore';
+import { Firestore, doc, setDoc, collection, collectionData, getDoc, getDocs, DocumentData } from '@angular/fire/firestore';
 
 export interface User {
   id: string;
@@ -81,10 +64,9 @@ export class AuthService {
       this._isLoggedIn.set(true);
       localStorage.setItem('currentUser', JSON.stringify(user));
     } catch (err) {
-      console.error('❌ Failed to fetch user from Firestore:', err);
+      console.error('Failed to fetch user from Firestore:', err);
     }
   }
-
   registerUser(username: string, email: string, password: string): Promise<void> {
     return createUserWithEmailAndPassword(this.auth, email, password).then(
       async (cred: UserCredential) => {
@@ -103,10 +85,13 @@ export class AuthService {
           email: user.email,
           createdAt: new Date(),
         });
+
+        this._currentUser.set(user);
+        this._isLoggedIn.set(true);
+        localStorage.setItem('currentUser', JSON.stringify(user));
       }
     );
   }
-
 
   loginUser(email: string, password: string): Observable<User> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(

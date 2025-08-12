@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { StudyPagesService } from '../../../core/services/study-pages.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { StudyPage, SyllabusItem } from '../../../models/study-page.model';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
   selector: 'app-new-study-page',
@@ -28,7 +29,8 @@ export class NewStudyPage {
   constructor(
     private router: Router,
     private studyPagesService: StudyPagesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private loader: LoaderService
   ) { }
 
   addSyllabusItem() {
@@ -75,7 +77,7 @@ export class NewStudyPage {
     this.newResource.set('');
   }
 
-  createStudyPage() {
+  async createStudyPage() {
     const title = this.title().trim();
     const subject = this.subject().trim();
     const notes = this.notes().trim();
@@ -104,14 +106,17 @@ export class NewStudyPage {
       ownerId
     };
 
-    this.studyPagesService.addPage(newPage).then(() => {
-      this.successMessage.set('✅ Study page created successfully!');
-      setTimeout(() => this.successMessage.set(null), 3000);
-      setTimeout(() => this.router.navigate(['/my-study-pages']), 3100);
-    }).catch((err) => {
+    this.loader.show();
+
+    try {
+      await this.studyPagesService.addPage(newPage);
+      this.router.navigate(['/my-study-pages']);
+    } catch (err) {
       console.error('Error creating page:', err);
       alert('Something went wrong while creating the study page.');
-    });
+    } finally {
+      this.loader.hide();
+    }
   }
 
   goBackToMyPages() {

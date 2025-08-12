@@ -1,26 +1,21 @@
-<div class="wrapper">
+<div class="global-loader" *ngIf="loading()">
+    <div class="spinner"></div>
+</div>
 
+<div class="wrapper">
     <div class="form-wrapper">
         <div class="form-container">
-
             <a routerLink="/tasks" class="back-link">← Back to Tasks</a>
 
-
-            <p *ngIf="successMessage()" class="success-message">
-                {{ successMessage() }}
-            </p>
             <div class="header">
                 <h1 class="form-title">Edit Task</h1>
             </div>
             <form #taskForm="ngForm" (ngSubmit)="updateTask()" class="form-card">
-
                 <label class="form-label">Task Title *</label>
                 <input type="text" class="form-input" [(ngModel)]="titleValue" name="title" required />
 
-
                 <label class="form-label">Subject *</label>
                 <input type="text" class="form-input" [(ngModel)]="subjectValue" name="subject" required />
-
 
                 <label class="form-label">Priority *</label>
                 <select class="form-select" [(ngModel)]="priorityValue" name="priority" required>
@@ -29,10 +24,8 @@
                     <option value="high">High</option>
                 </select>
 
-
                 <label class="form-label">Due Date *</label>
                 <input type="date" class="form-input" [(ngModel)]="dueValue" name="due" required />
-
 
                 <label class="form-label">Subtasks</label>
                 <div class="subtask-input-wrapper">
@@ -47,7 +40,6 @@
                         <button type="button" class="remove-button" (click)="removeSubtask(i)">✕</button>
                     </li>
                 </ul>
-
 
                 <div class="form-actions">
                     <button type="button" class="clear-button" (click)="goBackToTasks()">Cancel</button>

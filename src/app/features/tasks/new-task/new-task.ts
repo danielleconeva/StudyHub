@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ErrorService } from '../../../core/services/error.service';
 import { Task, Subtask } from '../../../models/task.model';
 import { Timestamp } from '@angular/fire/firestore';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
   selector: 'app-new-task',
@@ -21,6 +22,7 @@ export class NewTask {
   private authService = inject(AuthService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
+  private loader = inject(LoaderService);
 
   titleValue = '';
   subjectValue = '';
@@ -53,7 +55,7 @@ export class NewTask {
     this.subtasks = [];
   }
 
-  createTask() {
+  async createTask() {
     const user = this.authService.currentUser?.();
     if (!user) {
       this.errorService.show?.('You must be logged in to create a task.');
@@ -83,8 +85,15 @@ export class NewTask {
       ownerId: user.id
     };
 
-    this.taskService.createTask(task)
-      .then(() => this.router.navigate(['/tasks']))
-      .catch(() => this.errorService.show?.('Failed to create task.'));
+    this.loader.show();
+
+    try {
+      await this.taskService.createTask(task);
+      this.router.navigate(['/tasks']);
+    } catch {
+      this.errorService.show?.('Failed to create task.');
+    } finally {
+      this.loader.hide();
+    }
   }
 }

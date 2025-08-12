@@ -32,7 +32,7 @@ export class EditTask implements OnInit {
   newSubtaskValue = '';
   subtasks: Subtask[] = [];
 
-  successMessage = signal<string | null>(null);
+  loading = signal(false);
 
   getTodayDate(): string {
     return new Date().toISOString().split('T')[0];
@@ -55,30 +55,34 @@ export class EditTask implements OnInit {
       return;
     }
 
-    this.taskService.getTaskById(id).then((task: Task | null) => {
-      if (!task) {
-        this.errorService.show?.('Task not found.');
+    this.loading.set(true);
+    this.taskService.getTaskById(id)
+      .then((task: Task | null) => {
+        if (!task) {
+          this.errorService.show?.('Task not found.');
+          this.router.navigate(['/tasks']);
+          return;
+        }
+
+        if (task.ownerId !== currentUserId) {
+          this.errorService.show?.('You are not authorized to edit this task.');
+          this.router.navigate(['/not-found']);
+          return;
+        }
+
+        this.titleValue = task.title;
+        this.subjectValue = task.subject;
+        this.priorityValue = task.priority;
+        this.dueValue = task.due.toDate().toISOString().split('T')[0];
+        this.subtasks = [...task.subtasks];
+      })
+      .catch(() => {
+        this.errorService.show?.('Failed to load task.');
         this.router.navigate(['/tasks']);
-        return;
-      }
-
-
-      if (task.ownerId !== currentUserId) {
-        this.errorService.show?.('You are not authorized to edit this task.');
-        this.router.navigate(['/not-found']);
-        return;
-      }
-
-
-      this.titleValue = task.title;
-      this.subjectValue = task.subject;
-      this.priorityValue = task.priority;
-      this.dueValue = task.due.toDate().toISOString().split('T')[0];
-      this.subtasks = [...task.subtasks];
-    }).catch(() => {
-      this.errorService.show?.('Failed to load task.');
-      this.router.navigate(['/tasks']);
-    });
+      })
+      .finally(() => {
+        this.loading.set(false);
+      });
   }
 
   addSubtask() {
@@ -104,6 +108,8 @@ export class EditTask implements OnInit {
       return;
     }
 
+    this.loading.set(true);
+
     const doneCount = this.subtasks.filter(s => s.done).length;
     const progress = this.subtasks.length
       ? Math.round((doneCount / this.subtasks.length) * 100)
@@ -122,11 +128,12 @@ export class EditTask implements OnInit {
 
     this.taskService.updateTask(this.taskId, updatedTask)
       .then(() => {
-        this.successMessage.set('Task updated successfully!');
-        setTimeout(() => this.successMessage.set(null), 3000);
-        setTimeout(() => this.router.navigate(['/tasks']), 3100);
+        this.router.navigate(['/tasks']);
       })
-      .catch(() => this.errorService.show?.('Failed to update task.'));
+      .catch(() => this.errorService.show?.('Failed to update task.'))
+      .finally(() => {
+        this.loading.set(false);
+      });
   }
 
   goBackToTasks() {

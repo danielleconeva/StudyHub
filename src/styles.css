@@ -21,3 +21,42 @@
    --gradient-backdrop: linear-gradient(135deg, hsl(240 30% 97%), hsl(220 25% 96%), hsl(280 20% 97%));
   --gradient-soft: linear-gradient(135deg, hsl(220 70% 92%), hsl(280 60% 92%), hsl(160 60% 92%));
 }
+.global-loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top: 3px solid rgba(255, 255, 255, 0.95);
+  border-right: 3px solid rgba(255, 255, 255, 0.5);
+  animation: spin 0.8s linear infinite, glow 1.6s ease-in-out infinite;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.2), 
+              0 0 8px rgba(255, 255, 255, 0.15); 
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.2),
+                0 0 8px rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.35),
+                0 0 12px rgba(255, 255, 255, 0.2);
+  }
+}

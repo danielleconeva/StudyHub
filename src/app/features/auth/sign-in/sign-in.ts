@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ErrorService } from '../../../core/services/error.service';
 import { NgClass } from '@angular/common';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -21,7 +22,8 @@ export class SignIn {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    public errorService: ErrorService
+    public errorService: ErrorService,
+    private loader: LoaderService
   ) {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -46,17 +48,21 @@ export class SignIn {
     const { email, password } = this.signInForm.value;
 
     this.isSubmitting = true;
+    this.loader.show();
     this.errorService.clear();
 
     this.authService.loginUser(email!, password!).subscribe({
       next: () => {
         this.router.navigateByUrl('/');
+        this.isSubmitting = false;
+        this.loader.hide();
       },
       error: (err) => {
         const msg = this.mapFirebaseError(err);
         this.errorService.show(msg);
         this.signInForm.reset();
         this.isSubmitting = false;
+        this.loader.hide();
       }
     });
   }
