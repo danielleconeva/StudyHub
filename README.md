@@ -2,6 +2,9 @@
 
 **StudyHub** is a modern web application built with **Angular** that focuses on enhancing productivity and organization for students and self-learners. It offers a distraction-free study environment, intelligent task management, and tools to create and share structured study resources.  
 
+**Live Demo:**  
+🔗 **[https://studyhub-6b7d9.web.app](https://studyhub-6b7d9.web.app)**  
+
 ---
 
 ## **Features**
@@ -53,21 +56,32 @@ cd StudyHub
 # 2. Install dependencies
 npm install
 
-# 3. Run the development server
+# 3. Run the development server (local environment)
 npm start
 
 # 4. Open in browser
 http://localhost:4200/
 ```
+> For production deployment, the application is hosted on **Firebase Hosting**. See the live version in the Usage Guide below.
 
 ---
 
 ## **Usage Guide**
-- **Register or Sign In** – Access personalized features and persistent data.  
-- **Focus Room** – Start a study session with customizable timers and ambient soundscapes.  
-- **Task Management** – Create and manage tasks with priorities, subtasks, and progress tracking.  
-- **Study Pages** – Add, edit, and organize study notes; toggle public/private visibility.  
-- **Explore** – Discover community-shared pages, leave comments, and like your favorites.  
+The application is live and accessible at:  
+🔗 **[https://studyhub-6b7d9.web.app](https://studyhub-6b7d9.web.app)**  
+
+For a full demonstration of the platform’s features, you can log in with the following test account:  
+- **Email:** `alice@abv.bg`  
+- **Password:** `123456`  
+
+Alternatively, you may register a new account directly within the application to explore the features with your own profile.  
+
+**Core usage workflow:**  
+1. **Sign In / Register** – Authenticate to unlock personalized features and persistent data.  
+2. **Focus Room** – Initiate a study session with customizable timers and ambient audio.  
+3. **Task Management** – Create, prioritize, and track tasks with real-time progress updates.  
+4. **Study Pages** – Add, edit, and manage your notes; toggle public/private visibility as needed.  
+5. **Explore Catalog** – Browse public resources, apply filters, like pages, and join comment discussions.  
 
 ---
 
