@@ -85,6 +85,5 @@ Alternatively, you may register a new account directly within the application to
 
 ---
 
-## **License & Contributions**
-This project was developed as part of a university assignment and is publicly available under an open license on GitHub.  
-Contributions are welcome — fork the repository and submit a pull request for review.  
+## **License**
+This project was developed as part of a university assignment and is publicly available on GitHub for demonstration purposes.
