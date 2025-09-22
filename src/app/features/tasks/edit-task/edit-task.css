@@ -103,6 +103,8 @@
 
 .form-input,
 .form-select {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   padding: 14px 16px;
   font-size: 14px;
