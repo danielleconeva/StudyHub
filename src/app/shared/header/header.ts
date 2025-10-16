@@ -28,4 +28,10 @@ export class Header {
       this.router.navigate(['/']);
     });
   }
+  closeMenu() {
+    const checkbox = document.getElementById('mobile-menu-toggle') as HTMLInputElement;
+    if (checkbox) {
+      checkbox.checked = false;
+    }
+  }
 }
