@@ -1,4 +1,3 @@
-
 .focus-room-container {
   min-height: 100vh;
   padding: 4rem 3rem;
@@ -7,14 +6,24 @@
   flex-direction: column;
   align-items: center;
   gap: 3rem;
-  background: linear-gradient(135deg, hsl(240 30% 97%), hsl(220 25% 96%), hsl(280 20% 97%));
+  background: linear-gradient(
+    135deg,
+    hsl(240 30% 97%),
+    hsl(220 25% 96%),
+    hsl(280 20% 97%)
+  );
 }
 
 .focus-room-container::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, hsl(220 70% 92%), hsl(280 60% 92%), hsl(160 60% 92%));
+  background: linear-gradient(
+    135deg,
+    hsl(220 70% 92%),
+    hsl(280 60% 92%),
+    hsl(160 60% 92%)
+  );
   opacity: 0.3;
   animation: floatingGlass 20s ease-in-out infinite;
   border-radius: inherit;
@@ -24,7 +33,7 @@
 .title {
   font-size: 3rem;
   font-weight: 800;
- background: linear-gradient(to right, hsl(220 70% 60%), hsl(302, 60%, 65%));
+  background: linear-gradient(to right, hsl(220 70% 60%), hsl(302, 60%, 65%));
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -45,7 +54,6 @@
   position: relative;
 }
 
-
 .cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -56,7 +64,6 @@
   width: 100%;
   max-width: 1200px;
 }
-
 
 .card {
   background: var(--gradient-glass);
@@ -72,11 +79,18 @@
   overflow: hidden;
 }
 
-.session-mode { grid-area: session; }
-.motivation { grid-area: motivation; }
-.timer { grid-area: timer; }
-.sounds { grid-area: sounds; }
-
+.session-mode {
+  grid-area: session;
+}
+.motivation {
+  grid-area: motivation;
+}
+.timer {
+  grid-area: timer;
+}
+.sounds {
+  grid-area: sounds;
+}
 
 .session-mode h2 {
   font-size: 1.2rem;
@@ -111,11 +125,10 @@
 }
 
 .mode-buttons button.active {
-   background: var(--gradient-primary);
+  background: var(--gradient-primary);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
 
 .motivation h2 {
   font-size: 1.2rem;
@@ -136,7 +149,6 @@
   line-height: 1.4;
 }
 
-
 .timer {
   display: flex;
   flex-direction: column;
@@ -152,11 +164,11 @@
 }
 
 .circle-border {
-  width: 200px; 
+  width: 200px;
   height: 200px;
-  padding: 2rem; 
+  padding: 2rem;
   border-radius: 50%;
-  border: 12px solid #F9F9FB; 
+  border: 12px solid #f9f9fb;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(16px);
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
@@ -176,14 +188,14 @@
   margin-bottom: 1rem;
   text-align: center;
 }
- h2 i {
-    font-size: 1rem;
- }
+h2 i {
+  font-size: 1rem;
+}
 
 .time-display {
   font-size: 4rem;
   font-weight: 800;
- background: var(--gradient-primary);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -209,7 +221,7 @@
 }
 
 .start-btn {
-   background: var(--gradient-primary);
+  background: var(--gradient-primary);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
@@ -220,7 +232,6 @@
   color: #374151;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 
 .sounds h2 {
   font-size: 1.2rem;
@@ -254,11 +265,10 @@
 }
 
 .sound-buttons button.active {
-   background: var(--gradient-primary);
+  background: var(--gradient-primary);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
 
 .volume-slider {
   text-align: left;
@@ -304,7 +314,6 @@
   box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
-
 @media (max-width: 768px) {
   .cards-grid {
     grid-template-columns: 1fr;
@@ -331,5 +340,240 @@
 
   .title {
     font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 769px) {
+  .focus-room-container {
+    padding-top: 6rem;
+  }
+
+  .sound-buttons {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .focus-room-container {
+    padding: 6rem 1rem 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .session-mode h2,
+  .motivation h2,
+  .sounds h2,
+  .pomodoro-title {
+    font-size: 1.1rem;
+  }
+
+  .mode-buttons button,
+  .sound-buttons button {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .sound-buttons {
+    grid-template-columns: repeat(2, minmax(100px, 140px));
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .circle-border {
+    width: 180px;
+    height: 180px;
+    padding: 1.5rem;
+    border-width: 10px;
+  }
+
+  .time-display {
+    font-size: 3rem;
+  }
+
+  .start-btn,
+  .reset-btn {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .motivation blockquote {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .focus-room-container {
+    padding: 5rem 4rem;
+    gap: 4rem;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+  }
+
+  .cards-grid {
+    max-width: 1400px;
+    gap: 3.5rem;
+  }
+
+  .card {
+    padding: 2.2rem;
+    border-radius: 1.75rem;
+  }
+
+  .session-mode h2,
+  .motivation h2,
+  .sounds h2,
+  .pomodoro-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .mode-buttons button,
+  .sound-buttons button {
+    font-size: 1rem;
+    padding: 0.7rem 1.4rem;
+  }
+
+  .circle-border {
+    width: 240px;
+    height: 240px;
+    padding: 2.5rem;
+    border-width: 14px;
+  }
+
+  .time-display {
+    font-size: 4.5rem;
+  }
+
+  .start-btn,
+  .reset-btn {
+    padding: 0.85rem 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  .motivation blockquote {
+    font-size: 1.15rem;
+  }
+
+  .volume-slider label {
+    font-size: 1rem;
+  }
+
+  .volume-slider input[type="range"] {
+    height: 7px;
+  }
+
+  .volume-slider input[type="range"]::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+
+  .volume-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (min-width: 1900px) {
+  .focus-room-container {
+    padding: 6rem 5rem;
+    gap: 5rem;
+  }
+
+  .title {
+    font-size: 4rem;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+  }
+
+  .cards-grid {
+    max-width: 1600px;
+    gap: 4rem;
+  }
+
+  .card {
+    padding: 2.5rem;
+    border-radius: 2rem;
+  }
+
+  .session-mode h2,
+  .motivation h2,
+  .sounds h2,
+  .pomodoro-title {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+  }
+
+  .mode-buttons button,
+  .sound-buttons button {
+    font-size: 1.1rem;
+    padding: 0.8rem 1.6rem;
+  }
+
+  .circle-border {
+    width: 280px;
+    height: 280px;
+    padding: 3rem;
+    border-width: 16px;
+  }
+
+  .time-display {
+    font-size: 5rem;
+  }
+
+  .start-btn,
+  .reset-btn {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+  }
+
+  .timer-buttons {
+    gap: 1.5rem;
+  }
+
+  .motivation blockquote {
+    font-size: 1.3rem;
+    line-height: 1.6;
+  }
+
+  .volume-slider label {
+    font-size: 1.1rem;
+  }
+
+  .volume-slider input[type="range"] {
+    height: 8px;
+  }
+
+  .volume-slider input[type="range"]::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+  }
+
+  .volume-slider input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+  }
+
+  .sound-buttons {
+    gap: 1rem;
   }
 }
