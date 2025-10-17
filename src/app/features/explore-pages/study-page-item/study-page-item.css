@@ -1,5 +1,5 @@
 .page-card {
-background: var(--gradient-glass);
+  background: var(--gradient-glass);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid hsl(var(--border) / 0.3);
   border-radius: 1rem;
@@ -59,7 +59,6 @@ background: var(--gradient-glass);
   background: rgba(0, 0, 0, 0.05);
   border-radius: 6px;
 }
-
 
 .page-description {
   font-size: 0.95rem;
@@ -181,7 +180,6 @@ background: var(--gradient-glass);
   font-size: 0.9rem;
   color: #5d636e;
   transition: color 0.2s ease;
-
 }
 
 .meta-button.likes.disabled {
@@ -200,7 +198,7 @@ background: var(--gradient-glass);
 }
 
 .view-btn {
-   background: var(--gradient-primary);
+  background: var(--gradient-primary);
   color: white;
   padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
@@ -224,17 +222,34 @@ background: var(--gradient-glass);
   color: #666970;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 769px) {
+  .page-card {
+    padding: 1.25rem;
+  }
+
+  .header-row {
+    gap: 0.75rem;
+  }
+
+  .page-title {
+    font-size: 1.15rem;
+  }
+
+  .page-description {
+    font-size: 0.9rem;
+  }
+
   .card-footer {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .card-bottom-row {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 2rem;
+    width: 100%;
   }
 
   .card-actions {
@@ -245,5 +260,271 @@ background: var(--gradient-glass);
   .view-btn {
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-card {
+    padding: 2rem;
+    border-radius: 0.875rem;
+  }
+
+  .card-header {
+    margin-bottom: 0.875rem;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+  }
+
+  .page-description {
+    font-size: 0.875rem;
+  }
+
+  .tags {
+    margin: 0.875rem 0;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    max-width: 100px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+
+  .meta .name {
+    font-size: 0.85rem;
+  }
+
+  .meta .subject {
+    font-size: 0.75rem;
+  }
+
+  .meta-stats {
+    gap: 0.6rem;
+  }
+
+  .meta-button {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .view-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .date-text {
+    font-size: 0.75rem;
+    padding-right: 0.8rem;
+  }
+
+  .btn.icon-btn {
+    font-size: 1rem;
+  }
+
+  .card-owner-actions {
+    gap: 0.4rem;
+  }
+  .card-bottom-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-footer {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .card-bottom-row {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .card-actions {
+    width: 100%;
+    text-align: left;
+  }
+
+  .view-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (min-width: 1600px) {
+  .page-card {
+    padding: 1.75rem;
+    border-radius: 1.25rem;
+  }
+
+  .card-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .page-description {
+    font-size: 1.05rem;
+  }
+
+  .tags {
+    gap: 0.6rem;
+    margin: 1.25rem 0;
+  }
+
+  .tag {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.85rem;
+    max-width: 140px;
+  }
+
+  .avatar {
+    width: 46px;
+    height: 46px;
+    font-size: 1rem;
+  }
+
+  .meta .name {
+    font-size: 1rem;
+  }
+
+  .meta .subject {
+    font-size: 0.9rem;
+  }
+
+  .meta-stats {
+    gap: 0.875rem;
+  }
+
+  .meta-button {
+    font-size: 1rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .view-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 0.625rem;
+  }
+
+  .date-text {
+    font-size: 0.9rem;
+  }
+
+  .btn.icon-btn {
+    font-size: 1.2rem;
+    padding: 0.3rem;
+  }
+
+  .card-owner-actions {
+    gap: 0.6rem;
+  }
+
+  .card-footer {
+    padding-top: 1.25rem;
+  }
+
+  .card-bottom-row {
+    margin-top: 1.25rem;
+  }
+}
+
+@media (min-width: 1900px) {
+  .page-card {
+    padding: 2rem;
+    border-radius: 1.5rem;
+  }
+
+  .card-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .page-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .tags {
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+
+  .tag {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.95rem;
+    max-width: 160px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.1rem;
+  }
+
+  .author {
+    gap: 0.875rem;
+  }
+
+  .meta .name {
+    font-size: 1.1rem;
+  }
+
+  .meta .subject {
+    font-size: 0.95rem;
+  }
+
+  .meta-stats {
+    gap: 1rem;
+  }
+
+  .meta-button {
+    font-size: 1.05rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .view-btn {
+    padding: 0.7rem 1.75rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .date-text {
+    font-size: 0.95rem;
+  }
+
+  .btn.icon-btn {
+    font-size: 1.3rem;
+    padding: 0.35rem;
+  }
+
+  .card-owner-actions {
+    gap: 0.7rem;
+  }
+
+  .card-footer {
+    padding-top: 1.5rem;
+  }
+
+  .card-bottom-row {
+    margin-top: 1.5rem;
+    gap: 1.25rem;
   }
 }
