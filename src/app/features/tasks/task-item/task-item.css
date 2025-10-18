@@ -1,10 +1,9 @@
- 
-
 .task-card {
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 16px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   transition: all 0.2s ease;
   max-width: 100%;
   overflow: hidden;
@@ -20,7 +19,6 @@
   animation: fadeIn 0.6s ease-out;
 }
 
- 
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -38,14 +36,12 @@
   word-break: break-word;
 }
 
- 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
- 
 .priority-badge {
   font-size: 12px;
   font-weight: 600;
@@ -78,14 +74,13 @@
   border-color: rgba(16, 185, 129, 0.3);
 }
 
- 
 .actions {
   display: flex;
   gap: 0.3rem;
 }
 
 .btn.icon-btn {
-background: transparent;
+  background: transparent;
   border: none;
   font-size: 1rem;
   color: #5a5f69;
@@ -107,7 +102,6 @@ background: transparent;
   background-color: #fecaca;
 }
 
- 
 .progress-section {
   margin-bottom: 0.1rem;
 }
@@ -153,7 +147,6 @@ background: transparent;
   text-align: right;
 }
 
- 
 .subtask-section {
   margin-bottom: 0.1rem;
 }
@@ -232,7 +225,6 @@ background: transparent;
   text-decoration: line-through;
 }
 
- 
 .task-footer {
   display: flex;
   justify-content: space-between;
@@ -264,7 +256,6 @@ background: transparent;
   gap: 4px;
 }
 
-
 @media (max-width: 768px) {
   .card-header {
     flex-direction: column;
@@ -294,5 +285,235 @@ background: transparent;
   .btn.icon-btn {
     padding: 4px 8px;
     font-size: 12px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .task-card {
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .task-title {
+    font-size: 24px;
+    line-height: 1.5;
+  }
+
+  .header-actions {
+    gap: 16px;
+  }
+
+  .priority-badge {
+    font-size: 13px;
+    padding: 7px 16px;
+    letter-spacing: 0.6px;
+  }
+
+  .actions {
+    gap: 0.5rem;
+  }
+
+  .btn.icon-btn {
+    font-size: 1.1rem;
+    padding: 0.5rem;
+  }
+
+  .progress-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .progress-label-heading {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .progress-bar-wrapper {
+    gap: 16px;
+  }
+
+  .progress-bar {
+    height: 10px;
+    border-radius: 5px;
+  }
+
+  .progress-fill {
+    border-radius: 5px;
+  }
+
+  .progress-label {
+    font-size: 14px;
+    min-width: 40px;
+  }
+
+  .subtask-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .subtask-label {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .subtask-list {
+    gap: 10px;
+  }
+
+  .subtask-item {
+    gap: 14px;
+    padding-bottom: 0.75rem;
+  }
+
+  .subtask-item:last-child {
+    margin-bottom: 0.75rem;
+  }
+
+  .subtask-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+  }
+
+  .subtask-item input[type="checkbox"]:checked::after {
+    font-size: 11px;
+  }
+
+  .subtask-item label {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .task-footer {
+    padding-top: 20px;
+  }
+
+  .subject-badge {
+    padding: 6px 14px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .due-date {
+    font-size: 13px;
+    gap: 6px;
+  }
+}
+
+@media (min-width: 1900px) {
+  .task-card {
+    border-radius: 14px;
+    padding: 2.25rem;
+    margin-bottom: 24px;
+  }
+
+  .card-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .task-title {
+    font-size: 26px;
+    line-height: 1.5;
+  }
+
+  .header-actions {
+    gap: 18px;
+  }
+
+  .priority-badge {
+    font-size: 14px;
+    padding: 8px 18px;
+    letter-spacing: 0.7px;
+  }
+
+  .actions {
+    gap: 0.6rem;
+  }
+
+  .btn.icon-btn {
+    font-size: 1.2rem;
+    padding: 0.6rem;
+  }
+
+  .progress-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-label-heading {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar-wrapper {
+    gap: 18px;
+  }
+
+  .progress-bar {
+    height: 11px;
+    border-radius: 6px;
+  }
+
+  .progress-fill {
+    border-radius: 6px;
+  }
+
+  .progress-label {
+    font-size: 15px;
+    min-width: 45px;
+  }
+
+  .subtask-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .subtask-label {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .subtask-list {
+    gap: 12px;
+  }
+
+  .subtask-item {
+    gap: 16px;
+    padding-bottom: 0.875rem;
+  }
+
+  .subtask-item:last-child {
+    margin-bottom: 0.875rem;
+  }
+
+  .subtask-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
+
+  .subtask-item input[type="checkbox"]:checked::after {
+    font-size: 12px;
+  }
+
+  .subtask-item label {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .task-footer {
+    padding-top: 22px;
+  }
+
+  .subject-badge {
+    padding: 7px 16px;
+    font-size: 14px;
+    gap: 7px;
+  }
+
+  .due-date {
+    font-size: 14px;
+    gap: 7px;
   }
 }
