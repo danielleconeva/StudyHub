@@ -1,7 +1,7 @@
-
 .wrapper {
   padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   background: linear-gradient(180deg, #f8f9ff 0%, #e8ecff 100%);
   position: relative;
   z-index: 0;
@@ -11,7 +11,7 @@
 }
 
 .wrapper::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--gradient-soft);
@@ -21,13 +21,13 @@
   z-index: -1;
 }
 
-
 .details-container {
   max-width: 860px;
   margin: 5.5rem auto;
   margin-bottom: 1rem;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   color: #374151;
 }
 
@@ -78,7 +78,6 @@
   color: #9333ea !important;
 }
 
-
 .meta {
   display: flex;
   flex-wrap: wrap;
@@ -98,7 +97,9 @@
   font-size: 0.8rem;
 }
 
-.visibility, .likes, .date {
+.visibility,
+.likes,
+.date {
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -153,7 +154,7 @@
   width: 16px;
   height: 16px;
   accent-color: #6366f1;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .resources {
@@ -174,6 +175,8 @@
   align-items: center;
   gap: 0.5rem;
   transition: color 0.2s ease;
+  word-break: break-all; /* Force URLs to break */
+  overflow-wrap: break-word;
 }
 
 .resources a:hover {
@@ -184,7 +187,7 @@
 .comments-section {
   margin-bottom: 2rem;
   padding: 2rem;
- background: var(--gradient-glass);
+  background: var(--gradient-glass);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid hsl(var(--border) / 0.3);
   border-radius: 1rem;
@@ -204,7 +207,7 @@
 .avatar {
   width: 40px;
   height: 40px;
-   background: #855bd2;
+  background: #855bd2;
   opacity: 0.8;
   color: white;
   font-weight: 600;
@@ -273,6 +276,8 @@
   align-items: flex-start;
   padding-top: 0.5rem;
   border-top: 1px solid rgba(229, 231, 235, 0.5);
+  width: 100%; /* Ensure form respects container width */
+  box-sizing: border-box;
 }
 .fas {
   font-size: 1.2rem;
@@ -292,6 +297,9 @@
   border-radius: 0.5rem;
   font-family: inherit;
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
 }
 
 .comment-form textarea:focus {
@@ -331,27 +339,550 @@
   .details-container {
     margin: 1rem;
   }
-  
+
   .title-section,
   .section,
   .comments-section {
     padding: 1.5rem;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
-  
+
   .meta {
     gap: 0.75rem;
   }
-  
+
   .comment-form {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .comment-form .avatar {
     align-self: flex-start;
+  }
+}
+
+@media (max-width: 769px) {
+  .wrapper {
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .details-container {
+    margin: 5rem 0.5rem 1rem 0.5rem;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .back-link {
+    margin-left: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .title-section,
+  .section,
+  .comments-section {
+    padding: 1.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    word-wrap: break-word;
+  }
+
+  .meta {
+    gap: 0.75rem;
+  }
+
+  .resources {
+    overflow-x: hidden;
+  }
+
+  .resources li {
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .resources a {
+    font-size: 0.875rem;
+    word-break: break-all;
+    display: block;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+
+  .comment-form .avatar {
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+
+  .comment-form textarea {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 100px;
+    box-sizing: border-box;
+  }
+
+  .comment-form button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 0.75rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .details-container {
+    margin: 5rem 0.25rem 1rem 0.25rem;
+    box-sizing: border-box;
+    max-width: calc(100vw - 0.5rem);
+    overflow-x: hidden;
+  }
+
+  .back-link {
+    font-size: 0.8rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .title-section,
+  .section,
+  .comments-section {
+    padding: 1.25rem;
+    border-radius: 0.875rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 1.375rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+
+  .notes,
+  .syllabus-list li,
+  .resources a,
+  .text {
+    font-size: 0.875rem;
+    word-wrap: break-word;
+  }
+
+  .resources {
+    overflow-x: hidden;
+  }
+
+  .resources li {
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .resources a {
+    word-break: break-all;
+    overflow-wrap: break-word;
+    display: block;
+    max-width: 100%;
+  }
+
+  .meta {
+    gap: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .tag,
+  .visibility,
+  .likes,
+  .date {
+    font-size: 0.75rem;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .comment {
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+    max-width: 100%;
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .username {
+    font-size: 0.8rem;
+  }
+
+  .header .date {
+    font-size: 0.75rem;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+
+  .comment-form .avatar {
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+
+  .comment-form textarea {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 120px;
+    padding: 0.875rem;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+  }
+
+  .comment-form button {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+  }
+
+  .fas,
+  .far {
+    font-size: 1rem;
+  }
+
+  .fas.fa-globe,
+  .fas.fa-heart,
+  .fas.fa-arrow-left {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .details-container {
+    margin: 5rem 1rem 1rem 1rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .title-section,
+  .section,
+  .comments-section {
+    padding: 1.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .meta {
+    gap: 0.75rem;
+  }
+
+  .resources a {
+    word-break: break-all;
+    display: block;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .comment-form .avatar {
+    align-self: flex-start;
+  }
+
+  .comment-form textarea {
+    min-height: 100px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 1600px) {
+  .wrapper {
+    padding: 3rem;
+  }
+
+  .details-container {
+    max-width: 1000px;
+    margin: 6rem auto 1.5rem auto;
+  }
+
+  .back-link {
+    margin-bottom: 2.5rem;
+    margin-left: 2.5rem;
+    font-size: 0.95rem;
+  }
+
+  .title-section,
+  .section,
+  .comments-section {
+    padding: 2.5rem;
+    border-radius: 1.25rem;
+  }
+
+  .title {
+    font-size: 2.125rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .notes,
+  .syllabus-list li,
+  .resources a,
+  .text {
+    font-size: 1.05rem;
+  }
+
+  .meta {
+    gap: 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .tag {
+    font-size: 0.875rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .visibility,
+  .likes,
+  .date {
+    font-size: 0.875rem;
+  }
+
+  .avatar {
+    width: 46px;
+    height: 46px;
+    font-size: 1rem;
+  }
+
+  .comment {
+    gap: 0.875rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .header {
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .header .date {
+    font-size: 0.875rem;
+  }
+
+  .comment-form {
+    gap: 0.875rem;
+    padding-top: 0.75rem;
+  }
+
+  .comment-form textarea {
+    min-height: 90px;
+    padding: 0.875rem;
+    font-size: 1.05rem;
+  }
+
+  .comment-form button {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.95rem;
+  }
+
+  .syllabus-list li {
+    margin-bottom: 0.875rem;
+    padding: 0.6rem 0;
+  }
+
+  .syllabus-list li input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+  }
+
+  .resources li {
+    margin-bottom: 0.875rem;
+  }
+
+  .fas,
+  .far {
+    font-size: 1.35rem;
+  }
+
+  .fas.fa-globe,
+  .fas.fa-heart,
+  .fas.fa-arrow-left {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1900px) {
+  .wrapper {
+    padding: 4rem;
+  }
+
+  .details-container {
+    max-width: 1140px;
+    margin: 7rem auto 2rem auto;
+  }
+
+  .back-link {
+    margin-bottom: 3rem;
+    margin-left: 3rem;
+    font-size: 1rem;
+  }
+
+  .title-section,
+  .section,
+  .comments-section {
+    padding: 3rem;
+    border-radius: 1.5rem;
+  }
+
+  .title {
+    font-size: 2.375rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.375rem;
+    margin-bottom: 1.5rem;
+    gap: 0.6rem;
+  }
+
+  .notes,
+  .syllabus-list li,
+  .resources a,
+  .text {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  .meta {
+    gap: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .tag {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .visibility,
+  .likes,
+  .date {
+    font-size: 0.95rem;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.1rem;
+  }
+
+  .comment {
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .header {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+    gap: 0.6rem;
+  }
+
+  .username {
+    font-size: 1rem;
+  }
+
+  .header .date {
+    font-size: 0.95rem;
+  }
+
+  .delete-btn {
+    font-size: 0.95rem;
+  }
+
+  .comment-form {
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .comment-form textarea {
+    min-height: 100px;
+    padding: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .comment-form button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .syllabus-list li {
+    margin-bottom: 1rem;
+    padding: 0.7rem 0;
+    gap: 0.875rem;
+  }
+
+  .syllabus-list li input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  .resources li {
+    margin-bottom: 1rem;
+  }
+
+  .comments-section .section-title {
+    margin-bottom: 2rem;
+  }
+
+  .fas,
+  .far {
+    font-size: 1.5rem;
+  }
+
+  .fas.fa-globe,
+  .fas.fa-heart,
+  .fas.fa-arrow-left {
+    font-size: 1rem;
   }
 }
