@@ -15,10 +15,19 @@
   position: absolute;
   inset: 0;
   background: var(--gradient-soft);
-  opacity: 0.3;
-  animation: floatingGlass 20s ease-in-out infinite;
+  opacity: 0;
   border-radius: inherit;
   z-index: -1;
+  animation: fadeInBackground 0.6s ease-out forwards;
+}
+
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.3;
+  }
 }
 
 .details-container {
@@ -41,6 +50,18 @@
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s ease;
+  animation: fadeInLeft 0.6s ease-out;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .back-link:hover {
@@ -55,6 +76,18 @@
   border: 1px solid hsl(var(--border) / 0.3);
   border-radius: 1rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  animation: scaleIn 0.6s ease-out 0.1s both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .title {
@@ -114,6 +147,23 @@
   border: 1px solid hsl(var(--border) / 0.3);
   border-radius: 1rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  animation: scaleIn 0.6s ease-out both;
+}
+
+.section:nth-of-type(1) {
+  animation-delay: 0.2s;
+}
+
+.section:nth-of-type(2) {
+  animation-delay: 0.3s;
+}
+
+.section:nth-of-type(3) {
+  animation-delay: 0.4s;
+}
+
+.comments-section {
+  animation-delay: 0.5s;
 }
 
 .section-title {
@@ -175,7 +225,7 @@
   align-items: center;
   gap: 0.5rem;
   transition: color 0.2s ease;
-  word-break: break-all; /* Force URLs to break */
+  word-break: break-all;
   overflow-wrap: break-word;
 }
 
@@ -276,7 +326,7 @@
   align-items: flex-start;
   padding-top: 0.5rem;
   border-top: 1px solid rgba(229, 231, 235, 0.5);
-  width: 100%; /* Ensure form respects container width */
+  width: 100%;
   box-sizing: border-box;
 }
 .fas {

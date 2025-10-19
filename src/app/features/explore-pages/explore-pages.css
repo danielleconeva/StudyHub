@@ -16,14 +16,36 @@
   position: absolute;
   inset: 0;
   background: var(--gradient-soft);
-  opacity: 0.3;
-  animation: floatingGlass 20s ease-in-out infinite;
+  opacity: 0;
   border-radius: inherit;
   z-index: -1;
+  animation: fadeInBackground 0.6s ease-out forwards;
 }
+
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+
 .header {
   text-align: center;
   margin-bottom: 3rem;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .title {
@@ -54,7 +76,18 @@
   gap: 1rem;
   margin-bottom: 3rem;
   justify-content: center;
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .search-input,
@@ -93,10 +126,63 @@
   margin: 0 auto;
 }
 
+.page-grid > * {
+  animation: scaleIn 0.6s ease-out both;
+}
+
+.page-grid > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.page-grid > *:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.page-grid > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.page-grid > *:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.page-grid > *:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.page-grid > *:nth-child(6) {
+  animation-delay: 0.35s;
+}
+
+.page-grid > *:nth-child(n + 7) {
+  animation-delay: 0.4s;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 .load-more-wrapper {
   display: flex;
   justify-content: center;
   margin-top: 3rem;
+  animation: fadeIn 0.6s ease-out 0.5s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .load-more-btn {
@@ -119,16 +205,6 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 @media (max-width: 769px) {
   .explore-container {
     padding-top: 5rem;

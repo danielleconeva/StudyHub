@@ -72,13 +72,12 @@ export class SignUp {
       username: string; email: string; password: string;
     };
 
-    this.isSubmitting = true;   // keep button state
-    this.loader.show();         // show global overlay
+    this.isSubmitting = true;
+    this.loader.show();
 
     try {
       await this.authService.registerUser(username, email, password);
 
-      // Hide loader before showing toast so it’s never covered
       this.loader.hide();
       this.modal.success('Account created successfully!');
 
@@ -86,7 +85,6 @@ export class SignUp {
     } catch (err: any) {
       const msg = this.mapFirebaseError(err);
 
-      // Hide loader before showing error toast
       this.loader.hide();
       this.modal.error(msg);
 

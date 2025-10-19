@@ -239,7 +239,6 @@
     font-size: 0.9rem;
   }
 }
-/* ========== HAMBURGER MENU STYLES (CSS ONLY) ========== */
 
 .mobile-menu-toggle {
   display: none;
@@ -266,7 +265,6 @@
   transition: all 0.3s ease;
 }
 
-/* Hamburger animation when checked */
 .mobile-menu-toggle:checked ~ .navbar .hamburger span:nth-child(1) {
   transform: rotate(45deg) translate(0.5rem, 0.5rem);
 }
@@ -402,7 +400,7 @@
 }
 
 .mobile-nav-links li a i {
-  display: none; /* Hide icons in mobile menu for minimalist look */
+  display: none;
 }
 
 .mobile-welcome {
@@ -495,8 +493,6 @@
 .mobile-auth-buttons .logout-button i {
   font-size: 1rem;
 }
-
-/* ========== NAVBAR RESPONSIVE MEDIA QUERIES (BOTTOM) ========== */
 
 @media (max-width: 480px) {
   .navbar {

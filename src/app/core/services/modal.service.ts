@@ -8,8 +8,8 @@ export interface ModalConfig {
     type?: ModalType;
     confirmText?: string;
     cancelText?: string;
-    autoClose?: boolean;   // toast-like
-    durationMs?: number;   // toast duration
+    autoClose?: boolean;
+    durationMs?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -19,7 +19,7 @@ export class ModalService {
     private open(config: ModalConfig) {
         return new Promise<boolean>((resolve) => {
             const auto = !!config.autoClose;
-            const duration = config.durationMs ?? 700; // faster
+            const duration = config.durationMs ?? 700;
 
             this.state.set({
                 confirmText: 'OK',
@@ -29,7 +29,6 @@ export class ModalService {
                 resolve,
             });
 
-            // Only lock scroll for blocking dialogs
             if (!auto) document.body.classList.add('no-scroll');
 
             if (auto) {
@@ -44,7 +43,6 @@ export class ModalService {
         document.body.classList.remove('no-scroll');
     }
 
-    // Non-blocking, toast-like
     success(message: string, title = 'Success') {
         return this.open({ title, message, type: 'success', autoClose: true, durationMs: 2500 });
     }
@@ -53,7 +51,6 @@ export class ModalService {
     }
 
 
-    // Blocking dialogs
     alert(message: string, title = 'Alert') {
         return this.open({ title, message, type: 'info', cancelText: undefined });
     }

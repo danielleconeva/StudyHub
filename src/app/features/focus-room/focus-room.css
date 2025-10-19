@@ -25,9 +25,18 @@
     hsl(160 60% 92%)
   );
   opacity: 0.3;
-  animation: floatingGlass 20s ease-in-out infinite;
   border-radius: inherit;
   z-index: 0;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.3;
+  }
 }
 
 .title {
@@ -44,6 +53,18 @@
   text-align: center;
   position: relative;
   z-index: 10;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .subtitle {
@@ -52,6 +73,18 @@
   text-align: center;
   z-index: 1;
   position: relative;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .cards-grid {
@@ -74,22 +107,37 @@
   text-align: center;
   box-shadow: var(--shadow-glass), var(--shadow-inner);
   transition: var(--transition-glass);
-  animation: subtleFloat 4s ease-in-out infinite;
+  animation: scaleIn 0.6s ease-out both;
   position: relative;
   overflow: hidden;
 }
 
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 .session-mode {
   grid-area: session;
+  animation-delay: 0.1s;
 }
 .motivation {
   grid-area: motivation;
+  animation-delay: 0.2s;
 }
 .timer {
   grid-area: timer;
+  animation-delay: 0.3s;
 }
 .sounds {
   grid-area: sounds;
+  animation-delay: 0.4s;
 }
 
 .session-mode h2 {
@@ -291,6 +339,7 @@ h2 i {
   cursor: pointer;
   outline: none;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .volume-slider input[type="range"]::-webkit-slider-thumb {

@@ -12,7 +12,7 @@ import { AuthService } from '../../core/services/auth.service';
 export function usernameTakenValidator(authService: AuthService): AsyncValidatorFn {
     return (control: AbstractControl) => {
         return of(control.value).pipe(
-            debounceTime(1500), //
+            debounceTime(1500),
             switchMap((username) => {
                 if (!username?.trim()) return of(null);
                 return authService.getAllUsers().pipe(

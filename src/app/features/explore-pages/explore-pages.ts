@@ -160,8 +160,6 @@ export class ExplorePages {
     this.studyPageService
       .deleteStudyPage(page.id)
       .then(() => {
-        // optional success toast:
-        // this.modal.success('Page deleted successfully.');
       })
       .catch((err) => {
         console.error('Delete failed:', err);

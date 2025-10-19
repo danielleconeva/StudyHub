@@ -3,10 +3,19 @@
   position: absolute;
   inset: 0;
   background: var(--gradient-soft);
-  opacity: 0.3;
-  animation: floatingGlass 20s ease-in-out infinite;
+  opacity: 0;
   border-radius: inherit;
   z-index: -1;
+  animation: fadeInBackground 0.6s ease-out forwards;
+}
+
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.3;
+  }
 }
 
 .form-wrapper {
@@ -38,20 +47,35 @@
   box-shadow: 0 8px 24px rgba(31, 38, 135, 0.08),
     inset 0 1px 1px rgba(255, 255, 255, 0.15);
   filter: none;
-  animation: pulse 6s ease-in-out infinite;
   transition: all 0.3s ease;
+  animation: bubbleFloat 0.8s ease-out both;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
+@keyframes bubbleFloat {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+  }
+  to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
+}
+
+.glass-bubble:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.glass-bubble:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.glass-bubble:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.glass-bubble:nth-child(4) {
+  animation-delay: 0.4s;
 }
 
 form {
@@ -65,6 +89,18 @@ form {
   padding: 2rem;
   z-index: 10;
   box-sizing: border-box;
+  animation: scaleIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 fieldset {

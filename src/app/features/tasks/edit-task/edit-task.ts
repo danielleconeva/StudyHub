@@ -40,7 +40,6 @@ export class EditTask implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      // same message, via modal
       this.modal.error('Invalid task ID.');
       this.router.navigate(['/tasks']);
       return;

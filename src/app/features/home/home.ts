@@ -23,7 +23,6 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './home.css',
   imports: [RouterLink],
   animations: [
-    // Animate .glass-card elements with a stronger stagger effect
     trigger('fadeInStagger', [
       transition(':enter', [
         query('.glass-card', [
@@ -38,7 +37,6 @@ import { AuthService } from '../../core/services/auth.service';
       ])
     ]),
 
-    // Animate each bubble to fade + scale in gently
     trigger('bubbleFadeIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'scale(0.6) translateY(-20px)' }),
@@ -49,7 +47,6 @@ import { AuthService } from '../../core/services/auth.service';
       ])
     ]),
 
-    // Animate content sections sliding in from above
     trigger('contentFade', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-40px)' }),
